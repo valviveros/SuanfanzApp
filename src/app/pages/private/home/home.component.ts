@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       title: "Santi",
       icon: "/assets/img/ppRightBar.png",
-      isRead: true,
+      status: "online",
+      isRead: false,
       msgPreview: "Entonces ando usando fotos reales hahaha",
       lastMsg: "11:13",
       msgs: [
@@ -35,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       title: "Pablo Bejarano",
       icon: "/assets/img/ppInbox.png",
+      status: "online",
       isRead: true,
       msgPreview: "Estrenando componente",
       lastMsg: "18:30",
@@ -43,6 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       title: "Pablo Bejarano 2",
       icon: "/assets/img/ppInbox.png",
+      status: "online",
       isRead: true,
       msgPreview: "Nice front 😎",
       lastMsg: "23:30",
@@ -53,6 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentChat = {
     title: "",
     icon: "",
+    status: "",
     msgs: []
   };
 
@@ -71,6 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.chats.length > 0) {
       this.currentChat.title = this.chats[0].title;
       this.currentChat.icon = this.chats[0].icon;
+      this.currentChat.status = this.chats[0].status;
       this.currentChat.msgs = this.chats[0].msgs;
     }
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
@@ -85,6 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   onSelectInbox(index: number) {
     this.currentChat.title = this.chats[index].title;
       this.currentChat.icon = this.chats[index].icon;
+      this.currentChat.status = this.chats[index].status;
       this.currentChat.msgs = this.chats[index].msgs;
   }
 

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
+import { ChatI } from '../../interfaces/ChatI';
 import { MessageI } from '../../interfaces/MessageI';
 
 @Component({
@@ -11,15 +12,15 @@ export class ChatAreaComponent implements OnInit {
 
   @Input() title: string = ""
   @Input() icon: string = ""
+  @Input() status: string = ""
   @Input() msgs: Array<MessageI> = []
 
   msg: string;
-
   constructor(public chatService: ChatService) { }
 
   ngOnInit(): void {
   }
-
+  
   sendMsg() {
     const msg: MessageI = {
       content: this.msg,

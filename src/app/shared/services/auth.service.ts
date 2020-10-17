@@ -8,8 +8,6 @@ export class AuthService {
 
   user: UserI | undefined;
 
-  constructor() { }
-
   login(user: UserI) {
     const passKey = "suanfanzon";
     if (user.password === passKey) {
