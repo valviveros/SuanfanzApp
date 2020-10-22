@@ -7,7 +7,7 @@ import { MessageI } from 'src/app/pages/private/home/interfaces/MessageI';
 })
 export class ChatService {
 
-  socket: any;;
+  socket: any;
 
   constructor() { }
 

@@ -20,7 +20,6 @@ export class ChatAreaComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
   sendMsg() {
     const msg: MessageI = {
       content: this.msg,
