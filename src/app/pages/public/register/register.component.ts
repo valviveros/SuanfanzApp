@@ -1,51 +1,73 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserI } from 'src/app/shared/interfaces/UserI';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup, NgForm, Validators, FormBuilder,} from "@angular/forms";
+import { Router } from "@angular/router";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { RegisterService } from "src/app/shared/services/register.service";
+import { AngularFireDatabase} from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
 
-  userForm = new FormGroup({
-    email: new FormControl('pabhoz@gmail.com', Validators.required),
-    username: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required),
-    lname: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    favNumber: new FormControl(''),
+  ngForm = new FormGroup({
+    name: new FormControl(),
+    lname: new FormControl(),
+    phoneNumber: new FormControl(),
+    email: new FormControl(),    
+    password: new FormControl(),    
   });
 
-  constructor(private router:Router, private authService:AuthService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private registerService: RegisterService,
+    private formBuilder: FormBuilder,
+    private firebaseDB: AngularFireDatabase,
+    private firebaseAuth: AngularFireAuth
+  ) {}
 
   ngOnInit(): void {
+    this.registerService.getRegister();
+    this.resetForm();
   }
 
-  doRegister(e) {
-    e.preventDefault();
+  createForm() {
+    this.ngForm = this.formBuilder.group({
+      email: "",
+      phoneNumber: "",
+      name: "",
+      lname: "",
+      password: "",
+    });
+  }
 
-    const user: UserI = {
-      email: "pabhoz@usbcali.edu.co",
-      username: "pabhoz",
-      favNumber: 4,
-      lname: "Bejarano",
-      password: "suanfanzon",
-      name: "Pablo",
-    };
+  onSubmit() {
+    console.log("entré");
+    this.registerService.insertRegister(this.ngForm.value);
+    const Email = this.ngForm.controls.email.value;
+    const Password = this.ngForm.controls.password.value;
 
-    console.log(this.userForm);
+    
+    this.firebaseAuth.auth.createUserWithEmailAndPassword(Email, Password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
+    // this.resetForm(this.ngForm);
+  }
 
-    //this.authService.login(user);
-
-    //this.router.navigate(['/']);
+  resetForm(registerForm?: NgForm) {
+    if (registerForm != null) {
+      registerForm.reset();
+    }
   }
 
   goToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
-
 }
