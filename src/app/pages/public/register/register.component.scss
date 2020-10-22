@@ -17,6 +17,11 @@ $titleFont: sfProTextMedium;
     box-sizing: border-box;
 }
 
+.is-invalid {
+    border-left: solid 6px red;
+    border-color: #dc3545;
+}
+
 .material-icons {
     display: inline-flex;
     vertical-align: middle;
