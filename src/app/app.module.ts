@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { RegisterService} from '../app/shared/services/register.service';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { from } from 'rxjs';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { from } from 'rxjs';
     AngularFireAuthModule,
   ],
   providers: [
-    RegisterService
+    RegisterService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

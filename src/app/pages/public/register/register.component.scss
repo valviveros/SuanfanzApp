@@ -17,6 +17,11 @@ $titleFont: sfProTextMedium;
     box-sizing: border-box;
 }
 
+.material-icons {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
 .appContainer {
     width: 100vw;
     height: 100vh;
