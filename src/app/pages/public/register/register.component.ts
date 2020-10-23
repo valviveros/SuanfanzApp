@@ -6,7 +6,7 @@ import { RegisterService } from "src/app/shared/services/register.service";
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { CustomValidators } from 'src/app/custom-validators';
-
+import { SearchCountryField, TooltipLabel, CountryISO } from 'ngx-intl-tel-input';
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
@@ -32,6 +32,19 @@ export class RegisterComponent implements OnInit {
   ) { 
     this.ngForm = this.createSignupForm();
   }
+
+  separateDialCode = false;
+	SearchCountryField = SearchCountryField;
+	TooltipLabel = TooltipLabel;
+	CountryISO = CountryISO;
+	preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+	phoneForm = new FormGroup({
+		phone: new FormControl(undefined, [Validators.required])
+	});
+
+	changePreferredCountries() {
+		this.preferredCountries = [CountryISO.India, CountryISO.Canada];
+	}
 
   ngOnInit(): void {
     this.registerService.getRegister();

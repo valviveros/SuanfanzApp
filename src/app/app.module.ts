@@ -12,6 +12,8 @@ import { RegisterService} from '../app/shared/services/register.service';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { from } from 'rxjs';
 import { AuthService } from './shared/services/auth.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { AuthService } from './shared/services/auth.service';
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    BrowserAnimationsModule,
+    NgxIntlTelInputModule
   ],
   providers: [
     RegisterService,
