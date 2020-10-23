@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
       var errorCode = error.code;
       var errorMessage = error.message;
       // ...
+      console.log("error");
     });
   }
 }

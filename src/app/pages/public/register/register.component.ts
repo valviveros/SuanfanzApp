@@ -129,6 +129,25 @@ export class RegisterComponent implements OnInit {
         var errorCode = error.code;
         var errorMessage = error.message;
       });
+      
+      const query: string = '.appContainer #successRegister';
+      const registerMessage: any = document.querySelector(query);
+      registerMessage.style.display = "flex";
+
+      this.ngForm.reset({
+        email : '',
+        phoneNumber: '',
+        name: '',
+        lname: '',
+        password: '',
+        confirmPassword: '',
+      });
+
+      setTimeout(() => {
+        registerMessage.style.display = "none";
+        this.router.navigate(["/login"]);
+      }, 3000);
+
     } else {
       console.log("Passwords do no match");
 

@@ -62,6 +62,21 @@ $titleFont: sfProTextMedium;
             font-weight: bold;
         }
     }
+    .successRegister {
+        width: calc(65% - 138px);
+        height: 30px;
+        padding: 8px;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 105px;
+        color: #03D755;
+        background: rgba(#03D755, 0.3);
+        border-radius: 5px;
+        border: 1px solid #03D755;
+        z-index: 2;
+    }
     .box {
         width: 65%;
         position: absolute;
