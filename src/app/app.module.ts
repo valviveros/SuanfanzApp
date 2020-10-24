@@ -14,6 +14,7 @@ import { from } from 'rxjs';
 import { AuthService } from './shared/services/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
   ],
   providers: [
     RegisterService,
-    AuthService
+    AuthService,
+    AngularFireAuthGuard
   ],
   bootstrap: [AppComponent]
 })

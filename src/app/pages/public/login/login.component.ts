@@ -17,8 +17,6 @@ export class LoginComponent implements OnInit {
     signupPassword: new FormControl(),
   });
 
-  
-  
   constructor(private router:Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth) { }
 
 
@@ -30,7 +28,6 @@ export class LoginComponent implements OnInit {
   }
 
   doLogin() {
-    
     const Email = this.signupForm.controls.signupEmail.value;
     const Password = this.signupForm.controls.signupPassword.value;
     this.firebaseAuth.auth.signInWithEmailAndPassword(Email, Password).then(() => {

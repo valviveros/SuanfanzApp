@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService) {}
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {}
 
   ngOnInit(): void {
     this.initChat();
@@ -94,8 +94,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.currentChat.msgs = this.chats[index].msgs;
   }
 
-  doLogout() {
-    this.authService.logout();
+  async doLogout() {
+    await this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   destroySubscriptionList(exceptList: string[] = []): void {
