@@ -71,7 +71,5 @@ export class LoginComponent implements OnInit {
     } else {
       alert("El usuario no existe");
     }
-
-    
   }
 }
