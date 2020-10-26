@@ -1,30 +1,19 @@
 import { Injectable } from '@angular/core';
+import { from } from 'rxjs';
 import { UserI } from '../interfaces/UserI';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  user: UserI | undefined;
+  // user: UserI | undefined;
 
-  login(user: UserI) {
-    const passKey = "suanfanzon";
-    if (user.password === passKey) {
-      this.user = user;
-      window.localStorage.setItem('user', JSON.stringify(this.user));
-    }
-  }
+  constructor(private firebaseAuth: AngularFireAuth) { }
 
-  isLogged() {
-    const user = window.localStorage.getItem('user') || undefined;
-    const isLogged = user ? true : false;
-    if (isLogged) this.user = JSON.parse(user);
-    return isLogged;
-  }
 
-  logout() {
-    window.localStorage.clear();
-    window.location.href = '';
+  async logout() {
+    await this.firebaseAuth.auth.signOut();
   }
 }
