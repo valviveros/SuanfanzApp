@@ -54,6 +54,7 @@ $titleFont: sfProTextMedium;
             display: flex;
             flex-flow: row nowrap;
             .chatStatus{
+                display: flex;
                 width: 18px;
                 height: 18px;
                 margin-right: 2px;
