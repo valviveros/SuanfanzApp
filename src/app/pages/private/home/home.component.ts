@@ -5,15 +5,20 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angular/forms";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  
   countMore: number = 0;
   countContact: number = 0;
+
+  ngContactForm = new FormGroup({
+    contactName: new FormControl(),
+    contactNumber: new FormControl(),
+  });
 
   subscriptionList: {
     connection: Subscription,
@@ -63,7 +68,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.initChat();
@@ -125,19 +130,38 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  addNewContact() {
+  createContactForm() {
+    this.ngContactForm = this.formBuilder.group({
+      contactName: "",
+      contactNumber: ""
+    });
+  }
+  
+  panelNewContact() {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
     const query2: string = '#app .searchIcon';
     const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
     if (this.countContact == 0) {
       this.countContact = 1;
       addNewContact.style.left = 0;
       searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
     } else {
       this.countContact = 0;
       addNewContact.style.left = "-100vh";
       searchIcon.style.position = "absolute";
     }
+  }
+
+  addNewContact() {
+    console.log("se añade");
+    // const ContactName = this.ngContactForm.controls.contactName.value;
+    // const ContactNumber = this.ngContactForm.controls.contactNumber.value;
+    // console.log(ContactName,ContactNumber);
   }
 }
