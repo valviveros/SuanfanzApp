@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  
+  count: number = 0;
 
   subscriptionList: {
     connection: Subscription,
@@ -18,7 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   } = {
       connection: undefined,
       msgs: undefined
-  };
+    };
 
   chats: Array<ChatI> = [
     {
@@ -29,8 +31,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       msgPreview: "Entonces ando usando fotos reales hahaha",
       lastMsg: "11:13",
       msgs: [
-        {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
-        {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
+        { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+        { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
       ]
     },
     {
@@ -60,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {}
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) { }
 
   ngOnInit(): void {
     this.initChat();
@@ -89,9 +91,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onSelectInbox(index: number) {
     this.currentChat.title = this.chats[index].title;
-      this.currentChat.icon = this.chats[index].icon;
-      this.currentChat.status = this.chats[index].status;
-      this.currentChat.msgs = this.chats[index].msgs;
+    this.currentChat.icon = this.chats[index].icon;
+    this.currentChat.status = this.chats[index].status;
+    this.currentChat.msgs = this.chats[index].msgs;
   }
 
   async doLogout() {
@@ -107,4 +109,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMore() {
+    const query: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query);
+
+    if (this.count == 0) {
+      this.count = 1;
+      leftMoreOpen.style.transform = "scale(1)";
+      leftMoreOpen.style.opacity = 1;
+    } else {
+      this.count = 0;
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+    }
+  }
 }
