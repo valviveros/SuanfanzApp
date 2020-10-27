@@ -1,9 +1,12 @@
 <div id="app">
     <div class="leftBigContainer">
+
+        <div class="pManagment">Profile Management</div>
+
         <div class="topBarLeft">
             <div class="tbLeftContainer">
                 <div class="profileContainer">
-                    <img class="profile" src="/assets/img/pp.png" alt="" srcset="">
+                    <img id= "profile" class="profile" src="/assets/img/pp.png" alt="" srcset="">
                 </div>
                 <div class="logOut" (click)="doLogout()" >Log out</div>
                 <div class="leftRightIcons">
@@ -29,6 +32,7 @@
         <div class="inboxChat">
             <app-inbox-chat *ngFor="let inbox of chats; let i = index" (click)="onSelectInbox(i)" [profilePic]="inbox.icon" [name]="inbox.title" [msgTime]="inbox.lastMsg" [msgPreview]="inbox.msgPreview" [isRead]="inbox.isRead" ></app-inbox-chat>
         </div>
+       
     </div>
     <div class="rightBigContainer">
         <app-chat-area [title]="currentChat.title" [icon]="currentChat.icon" [status]="currentChat.status" [msgs]="currentChat.msgs"></app-chat-area>

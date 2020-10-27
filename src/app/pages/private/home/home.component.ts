@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+    
   subscriptionList: {
     connection: Subscription,
     msgs: Subscription
@@ -60,7 +61,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {}
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {
+    const imgProfile= new Event('mangePorf');
+    const target=document.getElementById("profile")
+
+    
+
+  }
 
   ngOnInit(): void {
     this.initChat();

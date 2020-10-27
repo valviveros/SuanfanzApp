@@ -21,16 +21,29 @@ $titleFont: sfProTextMedium;
     width: 100vw;
     height: 100vh;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
     align-items: center;
     background: #E5DDD5;
     font-family: $bodyFont;
+
+    
     .leftBigContainer {
         flex-grow: 1;
         flex-shrink: 1;
         flex-basis: 30%;
         width: 100%;
         height: 100%;
+        
+        .pManagment{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: pink;
+            z-index: 99;
+            top: 0;/* 
+            display: none; */
+        }
+        
         .topBarLeft {
             width: 100%;
             height: 59px;
@@ -135,12 +148,14 @@ $titleFont: sfProTextMedium;
             width: 100%;
             height: calc(100% - 108px);
             background: white;
+
             .inboxChat1 {
                 width: 100%;
                 height: 72px;
                 background: white;
                 display: flex;
                 cursor: pointer;
+                z-index: 2;
                 &:hover {
                     background: #F5F5F5;
                 }
