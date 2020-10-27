@@ -15,6 +15,7 @@ $titleFont: sfProTextMedium;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    overflow-y: hidden;
 }
 
 #app {
@@ -33,17 +34,92 @@ $titleFont: sfProTextMedium;
         flex-basis: 30%;
         width: 100%;
         height: 100%;
-        
-        .pManagment{
-            width: 100%;
+
+        .profileManager {
+            width: 30%;
             height: 100%;
-            position: relative;
-            background: pink;
-            z-index: 99;
-            top: 0;/* 
-            display: none; */
+            flex-basis: 30%;
+            position: absolute;
+            left: -100vh;
+            background: #EDEDED;
+            transition: all .3s ease;
+            z-index: 100;
+
+            .profileImgHolder{
+                display: flex;
+                align-items:center;
+                justify-content:center;
+                width: 100%;
+                height: auto;
+                /* background: #EDEDED; */
+                padding: 20px;
+                #profileImg{
+                    width: 200px;
+                    margin: 10px;
+                    border-radius: 50%;
+                }
+            }
+            .nameHolder{
+                width: 100%;
+                height: 100px;
+                padding:20px;
+                background: white;
+                #nombre{
+                    color:#009588;
+                    margin: 20px;
+                    font-family: $bodyFont;
+                }
+            }
+            .topPanelContainer {
+                width: 100%;
+                height: 108px;
+                background: #07BFA5;
+                display: flex;
+                align-items: flex-end;
+                padding-bottom: 18px;
+                padding: 0 0 15px 25px;
+                .goBackContainer {
+                    margin-bottom: 1px;
+                    cursor: pointer;
+                }
+                .profileManagerText {
+                    color: white;
+                    font-size: 19px;
+                    font-family: $titleFont;
+                    margin-left: 28px;
+                }
+            }
         }
-        
+
+        .addNewContact {
+            width: 30%;
+            height: 100%;
+            flex-basis: 30%;
+            position: absolute;
+            left: -100vh;
+            background: #EDEDED;
+            transition: all .3s ease;
+            z-index: 100;
+            .topPanelContainer {
+                width: 100%;
+                height: 108px;
+                background: #07BFA5;
+                display: flex;
+                align-items: flex-end;
+                padding-bottom: 18px;
+                padding: 0 0 15px 25px;
+                .goBackContainer {
+                    margin-bottom: 1px;
+                    cursor: pointer;
+                }
+                .addNewContactText {
+                    color: white;
+                    font-size: 19px;
+                    font-family: $titleFont;
+                    margin-left: 28px;
+                }
+            }
+        }
         .topBarLeft {
             width: 100%;
             height: 59px;
@@ -108,6 +184,56 @@ $titleFont: sfProTextMedium;
                             border-radius: 50%;
                         }
                     }
+                    .leftMoreOpen {
+                        position: absolute;
+                        width: 12%;
+                        height: 33%;
+                        top: 55px;
+                        left: 16.5%;
+                        padding: 9px 0;
+                        background: white;
+                        border-radius: 3px;
+                        box-shadow: 0 2px 5px 0 rgba(black,.26),0 2px 10px 0 rgba(black,.16);
+                        font-size: 14.2px;
+                        font-family: $bodyFont;
+                        transform-origin: right top;
+                        transform: scale(0);
+                        opacity: 0;
+                        transition: all .3s ease;
+                        .leftMoreOpenContainer {
+                            width: 100%;
+                            display: flex;
+                            flex-flow: column;
+                            .newContact {
+                                padding: 6px 58px 7px 24px;
+                                cursor: pointer;
+                                &:hover {
+                                    background: #F5F5F5;
+                                }
+                            }
+                            .newGroup {
+                                padding: 6px 58px 7px 24px;
+                                cursor: pointer;
+                                &:hover {
+                                    background: #F5F5F5;
+                                }
+                            }
+                            .editProfile {
+                                padding: 6px 58px 7px 24px;
+                                cursor: pointer;
+                                &:hover {
+                                    background: #F5F5F5;
+                                }
+                            }
+                            .logOut {
+                                padding: 6px 58px 7px 24px;
+                                cursor: pointer;
+                                &:hover {
+                                    background: #F5F5F5;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -142,6 +268,7 @@ $titleFont: sfProTextMedium;
                 border-radius: 100px;
                 border: none;
                 outline: none;
+                font-size: 13.5px;
             }
         }
         .inboxChat {

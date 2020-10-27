@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
+  
+  countMore: number = 0;
+  countContact: number = 0; 
+  countProfile: number = 0;
     
   subscriptionList: {
     connection: Subscription,
@@ -19,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   } = {
       connection: undefined,
       msgs: undefined
-  };
+    };
 
   chats: Array<ChatI> = [
     {
@@ -30,8 +33,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       msgPreview: "Entonces ando usando fotos reales hahaha",
       lastMsg: "11:13",
       msgs: [
-        {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
-        {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
+        { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+        { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
       ]
     },
     {
@@ -61,13 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {
-    const imgProfile= new Event('mangePorf');
-    const target=document.getElementById("profile")
-
-    
-
-  }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) { }
 
   ngOnInit(): void {
     this.initChat();
@@ -96,9 +93,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onSelectInbox(index: number) {
     this.currentChat.title = this.chats[index].title;
-      this.currentChat.icon = this.chats[index].icon;
-      this.currentChat.status = this.chats[index].status;
-      this.currentChat.msgs = this.chats[index].msgs;
+    this.currentChat.icon = this.chats[index].icon;
+    this.currentChat.status = this.chats[index].status;
+    this.currentChat.msgs = this.chats[index].msgs;
   }
 
   async doLogout() {
@@ -114,4 +111,50 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMore() {
+    const query: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query);
+
+    if (this.countMore == 0) {
+      this.countMore = 1;
+      leftMoreOpen.style.transform = "scale(1)";
+      leftMoreOpen.style.opacity = 1;
+    } else {
+      this.countMore = 0;
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+    }
+  }
+
+  profileManager() {
+    const query: string = '#app .profileManager';
+    const profileManager: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    if (this.countProfile == 0) {
+      this.countProfile = 1;
+      profileManager.style.left = 0;
+      searchIcon.style.position = "relative";
+    } else {
+      this.countProfile = 0;
+      profileManager.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
+    }
+  }
+
+  addNewContact() {
+    const query: string = '#app .addNewContact';
+    const addNewContact: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    if (this.countContact == 0) {
+      this.countContact = 1;
+      addNewContact.style.left = 0;
+      searchIcon.style.position = "relative";
+    } else {
+      this.countContact = 0;
+      addNewContact.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
+    }
+  }
 }
