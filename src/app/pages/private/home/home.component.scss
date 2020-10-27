@@ -38,7 +38,7 @@ $titleFont: sfProTextMedium;
             flex-basis: 30%;
             position: absolute;
             left: -100vh;
-            background: #EDEDED;
+            background: white;
             transition: all .3s ease;
             z-index: 100;
             .topPanelContainer {
@@ -58,6 +58,44 @@ $titleFont: sfProTextMedium;
                     font-size: 19px;
                     font-family: $titleFont;
                     margin-left: 28px;
+                }
+            }
+            .contactNameContainer {
+                width: 100%;
+                height: 93px;
+                padding: 14px 30px 10px;
+                border-bottom: 1px solid #F0F0F0;
+                background: white;
+                .contactName {
+                    font-size: 14px;
+                    color: #049688;
+                }
+                .inputContactName {
+                    font-size: 17px;
+                    border: none;
+                    outline: none;
+                }
+            }
+            .infoContactText {
+                height: 40px;
+                font-size: 14px;
+                color: #828282;
+                margin: 4px 20px 28px 30px;
+            }
+            .contactNumberContainer {
+                width: 100%;
+                height: 93px;
+                padding: 14px 30px 10px;
+                border-bottom: 1px solid #F0F0F0;
+                background: white;
+                .contactNumber {
+                    font-size: 14px;
+                    color: #049688;
+                }
+                .inputContactNumber {
+                    font-size: 17px;
+                    border: none;
+                    outline: none;
                 }
             }
         }
