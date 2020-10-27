@@ -15,7 +15,7 @@ $titleFont: sfProTextMedium;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    // overflow-y: hidden;
+    overflow-y: hidden;
 }
 
 #app {
@@ -33,9 +33,33 @@ $titleFont: sfProTextMedium;
         width: 100%;
         height: 100%;
         .addNewContact {
-            width: 100%;
+            width: 30%;
             height: 100%;
-            background: deeppink;
+            flex-basis: 30%;
+            position: absolute;
+            left: -100vh;
+            background: #EDEDED;
+            transition: all .3s ease;
+            z-index: 100;
+            .topPanelContainer {
+                width: 100%;
+                height: 108px;
+                background: #07BFA5;
+                display: flex;
+                align-items: flex-end;
+                padding-bottom: 18px;
+                padding: 0 0 15px 25px;
+                .goBackContainer {
+                    margin-bottom: 1px;
+                    cursor: pointer;
+                }
+                .addNewContactText {
+                    color: white;
+                    font-size: 19px;
+                    font-family: $titleFont;
+                    margin-left: 28px;
+                }
+            }
         }
         .topBarLeft {
             width: 100%;
@@ -185,7 +209,7 @@ $titleFont: sfProTextMedium;
                 border-radius: 100px;
                 border: none;
                 outline: none;
-                font-size: 13.8px;
+                font-size: 13.5px;
             }
         }
         .inboxChat {

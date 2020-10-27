@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   
-  count: number = 0;
+  countMore: number = 0;
+  countContact: number = 0;
 
   subscriptionList: {
     connection: Subscription,
@@ -113,14 +114,30 @@ export class HomeComponent implements OnInit, OnDestroy {
     const query: string = '#app .leftMoreOpen';
     const leftMoreOpen: any = document.querySelector(query);
 
-    if (this.count == 0) {
-      this.count = 1;
+    if (this.countMore == 0) {
+      this.countMore = 1;
       leftMoreOpen.style.transform = "scale(1)";
       leftMoreOpen.style.opacity = 1;
     } else {
-      this.count = 0;
+      this.countMore = 0;
       leftMoreOpen.style.transform = "scale(0)";
       leftMoreOpen.style.opacity = 0;
+    }
+  }
+
+  addNewContact() {
+    const query: string = '#app .addNewContact';
+    const addNewContact: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    if (this.countContact == 0) {
+      this.countContact = 1;
+      addNewContact.style.left = 0;
+      searchIcon.style.position = "relative";
+    } else {
+      this.countContact = 0;
+      addNewContact.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
     }
   }
 }
