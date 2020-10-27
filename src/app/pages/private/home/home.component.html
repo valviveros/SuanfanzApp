@@ -9,16 +9,16 @@
                 </div>
                 <div class="addNewContactText">New contact</div>
             </div>
-            <!-- <form [formGroup]="ngContactForm"> -->
+            <form [formGroup]="contactForm">
                 <div class="contactNameContainer">
                     <div class="contactName">Contact name</div>
-                    <input class="inputContactName" type="text" placeholder="Type name">
+                    <input class="inputContactName" formControlName="contactName" type="text" placeholder="Type name">
                 </div>
                 <div class="contactNumberContainer">
                     <div class="contactNumber">Contact number or email address</div>
-                    <input class="inputContactNumber"  type="text" placeholder="Type number or email address">
+                    <input class="inputContactNumber" formControlName="contactNumber" type="text" placeholder="Type number or email address">
                 </div>
-            <!-- </form> -->
+            </form>
             <div class="infoContactText">You need to add the country code before the number of your contact.</div>
             <div class="addContactBtn" (click)="addNewContact()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">

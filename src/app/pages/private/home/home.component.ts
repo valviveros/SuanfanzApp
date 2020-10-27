@@ -6,6 +6,9 @@ import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angular/forms";
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { UserI } from 'src/app/shared/interfaces/UserI';
+import { AngularFireAuth } from 'angularfire2/auth';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,8 +17,9 @@ import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angul
 export class HomeComponent implements OnInit, OnDestroy {
   countMore: number = 0;
   countContact: number = 0;
+  registerList: UserI[];
 
-  ngContactForm = new FormGroup({
+  contactForm = new FormGroup({
     contactName: new FormControl(),
     contactNumber: new FormControl(),
   });
@@ -68,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth) { }
 
   ngOnInit(): void {
     this.initChat();
@@ -130,13 +134,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  createContactForm() {
-    this.ngContactForm = this.formBuilder.group({
-      contactName: "",
-      contactNumber: ""
-    });
-  }
-  
   panelNewContact() {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
@@ -158,10 +155,28 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  addNewContact() {
-    console.log("se añade");
-    // const ContactName = this.ngContactForm.controls.contactName.value;
-    // const ContactNumber = this.ngContactForm.controls.contactNumber.value;
-    // console.log(ContactName,ContactNumber);
+  async addNewContact() {
+    let database = this.firebase.database;
+    let Key;
+    const ContactName = this.contactForm.controls.contactName.value;
+    const ContactNumber = this.contactForm.controls.contactNumber.value;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+    await this.firebase.database.ref('users').once('value', users => {
+      users.forEach(user => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          console.log("entramos",childKey);
+        }
+        console.log("recorrido",childKey);
+      });
+    });
+    
+    console.log(ContactName, ContactNumber);
+    this.firebase.database.ref('users').child(Key).child('contacts').push({
+      contactName: ContactName,
+      contactNumber: ContactNumber,
+    });
   }
 }
