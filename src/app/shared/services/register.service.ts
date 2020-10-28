@@ -13,7 +13,7 @@ export class RegisterService {
   constructor(private firebase: AngularFireDatabase) { }
 
   getRegister(){
-    return this.registerList = this.firebase.list('registers');
+    return this.registerList = this.firebase.list('users');
   }
 
   insertRegister(register: UserI){
