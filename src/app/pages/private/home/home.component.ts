@@ -8,12 +8,15 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angular/forms";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { UserI } from 'src/app/shared/interfaces/UserI';
+import { RegisterService } from "src/app/shared/services/register.service";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  registerList: UserI[];
   countMore: number = 0;
   countContact: number = 0;
 
@@ -70,10 +73,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { }
 
   ngOnInit(): void {
     this.initChat();
+    this.registerService.getRegister()
+      .snapshotChanges().subscribe(item => {
+        this.registerList = [];
+        item.forEach(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          this.registerList.push(x as UserI);
+        });
+      });
   }
 
   ngOnDestroy(): void {
@@ -154,27 +166,52 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async addNewContact() {
-    let database = this.firebase.database;
     let Key;
     const ContactName = this.contactForm.controls.contactName.value;
-    const ContactNumber = this.contactForm.controls.contactNumber.value;
+    let ContactNumber = this.contactForm.controls.contactNumber.value;
     const Email = this.firebaseAuth.auth.currentUser.email;
+    let emailRegexp = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    let userExist;
+
     await this.firebase.database.ref('users').once('value', users => {
       users.forEach(user => {
         const childKey = user.key;
         const childData = user.val();
         if (childData.email == Email) {
           Key = childKey;
-          console.log("entramos",childKey);
+          console.log("entramos", childKey);
         }
-        console.log("recorrido",childKey);
+        console.log("recorrido", childKey);
       });
     });
-    
-    console.log(ContactName, ContactNumber);
-    this.firebase.database.ref('users').child(Key).child('contacts').push({
-      contactName: ContactName,
-      contactNumber: ContactNumber,
-    });
+
+    if (ContactNumber.match(emailRegexp)) {
+      // Es correo
+      console.log("Es correo");
+      userExist = this.registerList.find(user => user.email == ContactNumber);
+      ContactNumber = userExist && userExist.email || undefined;
+      if (!userExist) {
+        console.log("Este usuario no existe")
+      } else {
+        console.log(ContactName, ContactNumber);
+        this.firebase.database.ref('users').child(Key).child('contacts').push({
+          contactName: ContactName,
+          contactNumber: ContactNumber,
+        });
+      }
+    } else {
+      console.log("Es teléfono");
+      // Es teléfono
+      userExist = this.registerList.find(user => user.phoneNumber.e164Number == ContactNumber && user);
+      if (!userExist) {
+        console.log("Este usuario no existe")
+      } else {
+        console.log(ContactName, ContactNumber);
+        this.firebase.database.ref('users').child(Key).child('contacts').push({
+          contactName: ContactName,
+          contactNumber: ContactNumber,
+        });
+      }
+    }
   }
 }
