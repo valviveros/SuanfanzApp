@@ -77,8 +77,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         const data : chat = chat.payload.doc.data() as chat;
         data.id = chat.payload.doc.id;
         this.chatRooms.push(data);
+        console.log(chat.payload.doc.data())
+
       })
-      console.log(chats)
     })
     // this.chatService2.getchatRoom();
 
