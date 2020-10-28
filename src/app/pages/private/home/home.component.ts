@@ -7,7 +7,6 @@ import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angular/forms";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { UserI } from 'src/app/shared/interfaces/UserI';
 import { AngularFireAuth } from 'angularfire2/auth';
 @Component({
   selector: 'app-home',
@@ -17,7 +16,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 export class HomeComponent implements OnInit, OnDestroy {
   countMore: number = 0;
   countContact: number = 0;
-  registerList: UserI[];
 
   contactForm = new FormGroup({
     contactName: new FormControl(),

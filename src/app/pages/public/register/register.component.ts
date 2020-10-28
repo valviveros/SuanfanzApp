@@ -7,12 +7,17 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { CustomValidators } from 'src/app/custom-validators';
 import { SearchCountryField, TooltipLabel, CountryISO } from 'ngx-intl-tel-input';
+import { UserI } from 'src/app/shared/interfaces/UserI';
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
+  registerList: UserI[];
+  register = [];
+  itemRef: any;
+
   ngForm = new FormGroup({
     name: new FormControl(),
     lname: new FormControl(),
@@ -29,25 +34,34 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private firebaseDB: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth
-  ) { 
+  ) {
     this.ngForm = this.createSignupForm();
   }
 
   separateDialCode = false;
-	SearchCountryField = SearchCountryField;
-	TooltipLabel = TooltipLabel;
-	CountryISO = CountryISO;
-	preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
-	phoneForm = new FormGroup({
-		phone: new FormControl(undefined, [Validators.required])
-	});
+  SearchCountryField = SearchCountryField;
+  TooltipLabel = TooltipLabel;
+  CountryISO = CountryISO;
+  preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+  phoneForm = new FormGroup({
+    phone: new FormControl(undefined, [Validators.required])
+  });
 
-	changePreferredCountries() {
-		this.preferredCountries = [CountryISO.India, CountryISO.Canada];
-	}
+  changePreferredCountries() {
+    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
+  }
 
   ngOnInit(): void {
-    this.registerService.getRegister();
+    // this.registerService.getRegister();
+    this.registerService.getRegister()
+      .snapshotChanges().subscribe(item => {
+        this.registerList = [];
+        item.forEach(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          this.registerList.push(x as UserI);
+        });
+      });
     this.resetForm();
   }
 
@@ -117,40 +131,51 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("entré");
-    this.registerService.insertRegister(this.ngForm.value);
     const Email = this.ngForm.controls.email.value;
+    const PhoneNumber = this.ngForm.controls.phoneNumber.value;
     const Password = this.ngForm.controls.password.value;
     const ConfirmPassword = this.ngForm.controls.confirmPassword.value;
+    let EmailExist = this.registerList.find(user => user.email == Email);
+    let PhoneExist = this.registerList.find(user => user.phoneNumber.e164Number == PhoneNumber.e164Number);
 
-    if (ConfirmPassword == Password) {
-      this.firebaseAuth.auth.createUserWithEmailAndPassword(Email, Password).catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-      });
-      
-      const query: string = '.appContainer #successRegister';
-      const registerMessage: any = document.querySelector(query);
-      registerMessage.style.display = "flex";
-
-      this.ngForm.reset({
-        email : '',
-        phoneNumber: '',
-        name: '',
-        lname: '',
-        password: '',
-        confirmPassword: '',
-      });
-
-      setTimeout(() => {
-        registerMessage.style.display = "none";
-        this.router.navigate(["/login"]);
-      }, 3000);
-
+    if (EmailExist) {
+      console.log("Ya existe este email");
+    } else if (PhoneExist) {
+      console.log("Ya existe este número");
+    } else if (EmailExist && PhoneExist) {
+      console.log("Ya existen email y número");
     } else {
-      console.log("Passwords do no match");
+      console.log("Registré");
+      this.registerService.insertRegister(this.ngForm.value);
+      if (ConfirmPassword == Password) {
+        this.firebaseAuth.auth.createUserWithEmailAndPassword(Email, Password).catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        });
 
+        const query: string = '.appContainer #successRegister';
+        const registerMessage: any = document.querySelector(query);
+        registerMessage.style.display = "flex";
+
+        this.ngForm.reset({
+          email: '',
+          phoneNumber: '',
+          name: '',
+          lname: '',
+          password: '',
+          confirmPassword: '',
+        });
+
+        setTimeout(() => {
+          registerMessage.style.display = "none";
+          this.router.navigate(["/login"]);
+        }, 3000);
+
+      } else {
+        console.log("Passwords do no match");
+
+      }
     }
   }
 
