@@ -9,6 +9,19 @@
                 </div>
                 <div class="editProfileText">Profile</div>
             </div>
+            <div class="profileImgHolder">
+                <div class="picOverlay" (click)="changePicture()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="#ffffff" d="M21.317 4.381H10.971L9.078 2.45c-.246-.251-.736-.457-1.089-.457H4.905c-.352 0-.837.211-1.078.468L1.201 5.272C.96 5.529.763 6.028.763 6.38v1.878l-.002.01v11.189a1.92 1.92 0 0 0 1.921 1.921h18.634a1.92 1.92 0 0 0 1.921-1.921V6.302a1.92 1.92 0 0 0-1.92-1.921zM12.076 18.51a5.577 5.577 0 1 1 0-11.154 5.577 5.577 0 0 1 0 11.154zm0-9.506a3.929 3.929 0 1 0 0 7.858 3.929 3.929 0 0 0 0-7.858z"></path></svg>
+                    <div class="picOverlayText">CHANGE PROFILE PHOTO</div>
+                </div>
+                <img class="profile" src="/assets/img/pp.png" alt=""
+                    srcset="">
+            </div>
+            <div class="yourNameContainer">
+                <div class="yourName">Your Name</div>
+                <input class="inputYourName" formControlName="yourName" type="text" placeholder="Type name">
+            </div>
+            <div class="infoContactText">This is not your username or pin. This name will be visible to your SuanfanzApp contacts.</div>
         </div>
         <div class="addNewContact">
             <div class="topPanelContainer">
@@ -21,12 +34,13 @@
             </div>
             <form [formGroup]="contactForm">
                 <div class="contactNameContainer">
-                    <div class="contactName">Contact name</div>
+                    <div class="contactName">Contact Name</div>
                     <input class="inputContactName" formControlName="contactName" type="text" placeholder="Type name">
                 </div>
                 <div class="contactNumberContainer">
-                    <div class="contactNumber">Contact number or email address</div>
-                    <input class="inputContactNumber" formControlName="contactNumber" type="text" placeholder="Type number or email address">
+                    <div class="contactNumber">Contact Number or Email Address</div>
+                    <input class="inputContactNumber" formControlName="contactNumber" type="text"
+                        placeholder="Type number or email address">
                 </div>
             </form>
             <div class="infoContactText">You need to add the country code before the number of your contact.</div>

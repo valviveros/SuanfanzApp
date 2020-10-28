@@ -166,6 +166,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  changePicture() {
+    console.log("Click foto");
+  }
+
   panelNewContact() {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
