@@ -86,6 +86,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initChat();
+    this.chatService.getChatRooms().subscribe( chats => {
+      chats.map( chat =>{
+        const data : chat = chat.payload.doc.data() as chat;
+        data.id = chat.payload.doc.id;
+        this.chatRooms.push(data);
+        console.log(chat.payload.doc.data())
+
+      })
+    })
     this.registerService.getRegister()
       .snapshotChanges().subscribe(item => {
         this.registerList = [];
