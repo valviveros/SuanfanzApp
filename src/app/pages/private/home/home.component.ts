@@ -10,24 +10,17 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserI } from 'src/app/shared/interfaces/UserI';
 import { RegisterService } from "src/app/shared/services/register.service";
-
-
-interface chat{ //puedo agregar chats
-  description: string
-  name: string
-  id: string
-
-}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public chatRooms: any = [];
   registerList: UserI[];
   countMore: number = 0;
   countContact: number = 0;
+  countProfile: number = 0;
+ 
 
   contactForm = new FormGroup({
     contactName: new FormControl(),
@@ -42,17 +35,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       msgs: undefined
     };
 
-  chats: Array<ChatI> = [//debe remplazarse por la BD
+  chats: Array<ChatI> = [
     {
-      title: "",
-      icon: "",
+      title: "Santi",
+      icon: "/assets/img/ppRightBar.png",
       status: "online",
       isRead: false,
       msgPreview: "Entonces ando usando fotos reales hahaha",
       lastMsg: "11:13",
       msgs: [
-        {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
-        {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
+        { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+        { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
       ]
     },
     {
@@ -82,19 +75,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { 
+  }
 
   ngOnInit(): void {
     this.initChat();
-    this.chatService.getChatRooms().subscribe( chats => {
-      chats.map( chat =>{
-        const data : chat = chat.payload.doc.data() as chat;
-        data.id = chat.payload.doc.id;
-        this.chatRooms.push(data);
-        console.log(chat.payload.doc.data())
-
-      })
-    })
+    
     this.registerService.getRegister()
       .snapshotChanges().subscribe(item => {
         this.registerList = [];
@@ -109,6 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroySubscriptionList();
     this.chatService.disconnect();
+    
   }
 
   initChat() {
@@ -159,6 +146,27 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.countMore = 0;
       leftMoreOpen.style.transform = "scale(0)";
       leftMoreOpen.style.opacity = 0;
+    }
+  }
+
+  panelEditProfile() {
+    const query: string = '#app .editProfileManager';
+    const editProfile: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
+    if (this.countProfile == 0) {
+      this.countProfile = 1;
+      editProfile.style.left = 0;
+      searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
+    } else {
+      this.countProfile = 0;
+      editProfile.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
     }
   }
 
@@ -231,5 +239,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
     }
+
+    this.contactForm.reset({
+      contactName: "",
+      contactNumber: "",
+    });
   }
 }
