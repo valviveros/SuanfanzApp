@@ -5,13 +5,21 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
+
+
+interface chat{ //puedo agregar chats
+  description: string
+  name: string
+  id: string
+
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
+  public chatRooms: any = [];
   subscriptionList: {
     connection: Subscription,
     msgs: Subscription
@@ -20,37 +28,37 @@ export class HomeComponent implements OnInit, OnDestroy {
       msgs: undefined
   };
 
-  chats: Array<ChatI> = [
-    {
-      title: "Santi",
-      icon: "/assets/img/ppRightBar.png",
-      status: "online",
-      isRead: false,
-      msgPreview: "Entonces ando usando fotos reales hahaha",
-      lastMsg: "11:13",
-      msgs: [
-        {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
-        {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
-      ]
-    },
-    {
-      title: "Pablo Bejarano",
-      icon: "/assets/img/ppInbox.png",
-      status: "online",
-      isRead: true,
-      msgPreview: "Estrenando componente",
-      lastMsg: "18:30",
-      msgs: []
-    },
-    {
-      title: "Pablo Bejarano 2",
-      icon: "/assets/img/ppInbox.png",
-      status: "online",
-      isRead: true,
-      msgPreview: "Nice front 😎",
-      lastMsg: "23:30",
-      msgs: []
-    },
+  chats: Array<ChatI> = [//debe remplazarse por la BD
+    // {
+    //   title: "",
+    //   icon: "",
+    //   status: "online",
+    //   isRead: false,
+    //   msgPreview: "Entonces ando usando fotos reales hahaha",
+    //   lastMsg: "11:13",
+    //   msgs: [
+    //     {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
+    //     {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
+    //   ]
+    // }
+    // {
+    //   title: "Pablo Bejarano",
+    //   icon: "/assets/img/ppInbox.png",
+    //   status: "online",
+    //   isRead: true,
+    //   msgPreview: "Estrenando componente",
+    //   lastMsg: "18:30",
+    //   msgs: []
+    // },
+    // {
+    //   title: "Pablo Bejarano 2",
+    //   icon: "/assets/img/ppInbox.png",
+    //   status: "online",
+    //   isRead: true,
+    //   msgPreview: "Nice front 😎",
+    //   lastMsg: "23:30",
+    //   msgs: []
+    // },
   ];
 
   currentChat = {
@@ -60,10 +68,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) {}
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private chatService2 : ChatService) {}
 
   ngOnInit(): void {
     this.initChat();
+    this.chatService.getChatRooms().subscribe( chats => {
+      chats.map( chat =>{
+        const data : chat = chat.payload.doc.data() as chat;
+        data.id = chat.payload.doc.id;
+        this.chatRooms.push(data);
+      })
+      console.log(chats)
+    })
+    // this.chatService2.getchatRoom();
+
+    
   }
 
   ngOnDestroy(): void {

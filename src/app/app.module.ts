@@ -15,6 +15,8 @@ import { AuthService } from './shared/services/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import {AngularFirestoreModule, FirestoreSettingsToken} from "@angular/fire/firestore"
+
 
 @NgModule({
   declarations: [
@@ -30,13 +32,15 @@ import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     BrowserAnimationsModule,
     NgxIntlTelInputModule
   ],
   providers: [
     RegisterService,
     AuthService,
-    AngularFireAuthGuard
+    AngularFireAuthGuard,
+    {provide: FirestoreSettingsToken, useValue: {}}
   ],
   bootstrap: [AppComponent]
 })

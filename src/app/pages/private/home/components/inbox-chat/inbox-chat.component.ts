@@ -21,6 +21,7 @@ export class InboxChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.readStatusColor = this.isRead && this.isRead !== "false" ? "#50C2F7" : "#ABABAB";
+    
   }
 
 }

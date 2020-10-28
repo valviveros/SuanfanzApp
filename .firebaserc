@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "chats-angular-bb6bb": {
+      "hosting": {
+        "Suanfanzapp": [
+          "chats-angular-bb6bb"
+        ]
+      }
+    }
+  }
+}

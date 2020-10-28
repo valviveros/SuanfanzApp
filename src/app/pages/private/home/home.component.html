@@ -27,7 +27,7 @@
             <input class="searchBar" type="text" placeholder="Search or start new chat" />
         </div>
         <div class="inboxChat">
-            <app-inbox-chat *ngFor="let inbox of chats; let i = index" (click)="onSelectInbox(i)" [profilePic]="inbox.icon" [name]="inbox.title" [msgTime]="inbox.lastMsg" [msgPreview]="inbox.msgPreview" [isRead]="inbox.isRead" ></app-inbox-chat>
+            <app-inbox-chat *ngFor="let chat of chatRooms" (click)="onSelectInbox(i)" [profilePic]="inbox.icon" [name]="chat.name" ></app-inbox-chat>
         </div>
     </div>
     <div class="rightBigContainer">

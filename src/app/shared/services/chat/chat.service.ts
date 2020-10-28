@@ -2,6 +2,7 @@ import * as io from 'socket.io-client';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MessageI } from 'src/app/pages/private/home/interfaces/MessageI';
+import {AngularFirestore} from "@angular/fire/firestore"
 @Injectable({
   providedIn: 'root'
 })
@@ -9,11 +10,19 @@ export class ChatService {
 
   socket: any;
 
-  constructor() { }
+  constructor(private db : AngularFirestore) { }
+
+  getChatRooms(){
+    return this.db.collection('chatsRooms').snapshotChanges()//observar cambios en tiempo real
+  }
+
+  getchatRoom(chat_id : string){
+    return this.db.collection('chatsRoom').doc(chat_id).valueChanges()
+  }
 
   connect() {
     return new Observable(observer => {
-      this.socket = io('https://15ec3f58d96d.ngrok.io');
+      this.socket = io('localhost:3000');
       this.socket.on('connect', () => {
         observer.next();
       })
