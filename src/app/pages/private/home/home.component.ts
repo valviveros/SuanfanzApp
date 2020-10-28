@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   registerList: UserI[];
   countMore: number = 0;
   countContact: number = 0;
+  countProfile: number = 0;
 
   contactForm = new FormGroup({
     contactName: new FormControl(),
@@ -144,6 +145,27 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  panelEditProfile() {
+    const query: string = '#app .editProfileManager';
+    const editProfile: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
+    if (this.countProfile == 0) {
+      this.countProfile = 1;
+      editProfile.style.left = 0;
+      searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
+    } else {
+      this.countProfile = 0;
+      editProfile.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
+    }
+  }
+
   panelNewContact() {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
@@ -213,5 +235,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
     }
+
+    this.contactForm.reset({
+      contactName: "",
+      contactNumber: "",
+    });
   }
 }

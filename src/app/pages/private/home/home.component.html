@@ -1,5 +1,15 @@
 <div id="app">
     <div class="leftBigContainer">
+        <div class="editProfileManager">
+            <div class="topPanelContainer">
+                <div class="goBackContainer" (click)="panelEditProfile()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="#ffffff" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path>
+                    </svg>
+                </div>
+                <div class="editProfileText">Profile</div>
+            </div>
+        </div>
         <div class="addNewContact">
             <div class="topPanelContainer">
                 <div class="goBackContainer" (click)="panelNewContact()">
@@ -29,7 +39,7 @@
         <div class="topBarLeft">
             <div class="tbLeftContainer">
                 <div class="profileContainer">
-                    <img class="profile" src="/assets/img/pp.png" alt="" srcset="">
+                    <img (click)="panelEditProfile()" class="profile" src="/assets/img/pp.png" alt="" srcset="">
                 </div>
                 <div class="leftRightIcons">
                     <div class="statusContainer">
@@ -59,7 +69,7 @@
                         <ul class="leftMoreOpenContainer">
                             <li class="newContact" (click)="panelNewContact()">New contact</li>
                             <li class="newGroup">New group</li>
-                            <li class="editProfile">Profile</li>
+                            <li class="editProfile" (click)="panelEditProfile()">Profile</li>
                             <li class="logOut" (click)="doLogout()">Log out</li>
                         </ul>
                     </div>
