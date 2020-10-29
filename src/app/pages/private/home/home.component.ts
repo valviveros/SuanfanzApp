@@ -5,17 +5,29 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, NgForm, Validators, FormBuilder, } from "@angular/forms";
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { UserI } from 'src/app/shared/interfaces/UserI';
+import { RegisterService } from "src/app/shared/services/register.service";
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  
+  registerList: UserI[];
   countMore: number = 0;
-  countContact: number = 0; 
-  countProfile: number = 0;
-    
+  countContact: number = 0;
+  countProfile: number = 0; 
+  selectedFile= null
+
+  contactForm = new FormGroup({
+    contactName: new FormControl(),
+    contactNumber: new FormControl(),
+  });
+
   subscriptionList: {
     connection: Subscription,
     msgs: Subscription
@@ -64,10 +76,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.initChat();
+    this.registerService.getRegister()
+      .snapshotChanges().subscribe(item => {
+        this.registerList = [];
+        item.forEach(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          this.registerList.push(x as UserI);
+        });
+      });
   }
 
   ngOnDestroy(): void {
@@ -126,35 +147,110 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  profileManager() {
-    const query: string = '#app .profileManager';
-    const profileManager: any = document.querySelector(query);
+  panelEditProfile() {
+    const query: string = '#app .editProfileManager';
+    const editProfile: any = document.querySelector(query);
     const query2: string = '#app .searchIcon';
     const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
     if (this.countProfile == 0) {
       this.countProfile = 1;
-      profileManager.style.left = 0;
+      editProfile.style.left = 0;
       searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
     } else {
       this.countProfile = 0;
-      profileManager.style.left = "-100vh";
+      editProfile.style.left = "-100vh";
       searchIcon.style.position = "absolute";
     }
   }
 
-  addNewContact() {
+
+  changePicture(event) {
+    console.log("Click foto")
+    console.log(event)
+    this.selectedFile= event.target.files[0]
+
+    
+
+  }
+
+  panelNewContact() {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
     const query2: string = '#app .searchIcon';
     const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
     if (this.countContact == 0) {
       this.countContact = 1;
       addNewContact.style.left = 0;
       searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
     } else {
       this.countContact = 0;
       addNewContact.style.left = "-100vh";
       searchIcon.style.position = "absolute";
     }
+  }
+
+  async addNewContact() {
+    let Key;
+    const ContactName = this.contactForm.controls.contactName.value;
+    let ContactNumber = this.contactForm.controls.contactNumber.value;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+    let emailRegexp = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    let userExist;
+
+    await this.firebase.database.ref('users').once('value', users => {
+      users.forEach(user => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          console.log("entramos", childKey);
+        }
+        console.log("recorrido", childKey);
+      });
+    });
+
+    if (ContactNumber.match(emailRegexp)) {
+      // Es correo
+      console.log("Es correo");
+      userExist = this.registerList.find(user => user.email == ContactNumber);
+      ContactNumber = userExist && userExist.email || undefined;
+      if (!userExist) {
+        console.log("Este usuario no existe")
+      } else {
+        console.log(ContactName, ContactNumber);
+        this.firebase.database.ref('users').child(Key).child('contacts').push({
+          contactName: ContactName,
+          contactNumber: ContactNumber,
+        });
+      }
+    } else {
+      console.log("Es teléfono");
+      // Es teléfono
+      userExist = this.registerList.find(user => user.phoneNumber.e164Number == ContactNumber && user);
+      if (!userExist) {
+        console.log("Este usuario no existe")
+      } else {
+        console.log(ContactName, ContactNumber);
+        this.firebase.database.ref('users').child(Key).child('contacts').push({
+          contactName: ContactName,
+          contactNumber: ContactNumber,
+        });
+      }
+    }
+
+    this.contactForm.reset({
+      contactName: "",
+      contactNumber: "",
+    });
   }
 }

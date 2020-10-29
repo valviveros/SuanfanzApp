@@ -4,8 +4,8 @@ import { HomeComponent } from './home.component';
 import { InboxChatComponent } from './components/inbox-chat/inbox-chat.component';
 import { ChatAreaComponent } from './components/chat-area/chat-area.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     ChatMessageComponent
   ],
   imports: [
-    CommonModule, FormsModule
+    CommonModule, FormsModule, ReactiveFormsModule,
+    HttpClientModule
   ],
 })
 export class HomeModule { }

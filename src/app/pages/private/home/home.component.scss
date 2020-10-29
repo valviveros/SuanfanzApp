@@ -34,42 +34,17 @@ $titleFont: sfProTextMedium;
         flex-basis: 30%;
         width: 100%;
         height: 100%;
-
-        .profileManager {
+        .editProfileManager {
             width: 30%;
             height: 100%;
             flex-basis: 30%;
+            display: flex;
+            flex-flow: column;
             position: absolute;
             left: -100vh;
             background: #EDEDED;
             transition: all .3s ease;
             z-index: 100;
-
-            .profileImgHolder{
-                display: flex;
-                align-items:center;
-                justify-content:center;
-                width: 100%;
-                height: auto;
-                /* background: #EDEDED; */
-                padding: 20px;
-                #profileImg{
-                    width: 200px;
-                    margin: 10px;
-                    border-radius: 50%;
-                }
-            }
-            .nameHolder{
-                width: 100%;
-                height: 100px;
-                padding:20px;
-                background: white;
-                #nombre{
-                    color:#009588;
-                    margin: 20px;
-                    font-family: $bodyFont;
-                }
-            }
             .topPanelContainer {
                 width: 100%;
                 height: 108px;
@@ -82,22 +57,88 @@ $titleFont: sfProTextMedium;
                     margin-bottom: 1px;
                     cursor: pointer;
                 }
-                .profileManagerText {
+                .editProfileText {
                     color: white;
                     font-size: 19px;
                     font-family: $titleFont;
                     margin-left: 28px;
                 }
             }
+            .profileImgHolder {
+                display: flex;
+                align-items:center;
+                justify-content:center;
+                width: 100%;
+                height: auto;
+                padding: 20px;
+                .picOverlay {
+                    width: 200px;
+                    height: 200px;
+                    position: absolute;
+                    display: flex;
+                    flex-flow: column;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 10px;
+                    padding-top: 15px;
+                    border-radius: 50%;
+                    background: #6c757db5;
+                    opacity: 0;
+                    cursor: pointer;
+                    &:hover {
+                        opacity: 1;
+                    }
+                    .picOverlayText {
+                        width: 100px;
+                        margin-top: 10px;
+                        text-align: center;
+                        font-size: 13px;
+                        color: white;
+                    }
+                }
+                .profile{
+                    width: 200px;
+                    height: 200px;
+                    margin: 10px;
+                    border-radius: 50%;
+                }
+            }
+            .yourNameContainer {
+                width: 100%;
+                height: 93px;
+                display: flex;
+                justify-content: center;
+                flex-flow: column;
+                padding: 14px 30px 10px;
+                border-bottom: 1px solid #F0F0F0;
+                background: white;
+                box-shadow: 0 1px 3px rgba($color: #000000, $alpha: .07);
+                .yourName {
+                    font-size: 14px;
+                    color: #049688;
+                }
+                .inputYourName {
+                    font-size: 17px;
+                    border: none;
+                    outline: none;
+                }
+            }
+            .infoContactText {
+                height: 40px;
+                font-size: 14px;
+                color: #828282;
+                margin: 14px 20px 28px 30px;
+            }
         }
-
         .addNewContact {
             width: 30%;
             height: 100%;
             flex-basis: 30%;
+            display: flex;
+            flex-flow: column;
             position: absolute;
             left: -100vh;
-            background: #EDEDED;
+            background: white;
             transition: all .3s ease;
             z-index: 100;
             .topPanelContainer {
@@ -118,6 +159,62 @@ $titleFont: sfProTextMedium;
                     font-family: $titleFont;
                     margin-left: 28px;
                 }
+            }
+            .contactNameContainer {
+                width: 100%;
+                height: 93px;
+                display: flex;
+                justify-content: center;
+                flex-flow: column;
+                padding: 14px 30px 10px;
+                border-bottom: 1px solid #F0F0F0;
+                background: white;
+                .contactName {
+                    font-size: 14px;
+                    color: #049688;
+                }
+                .inputContactName {
+                    font-size: 17px;
+                    border: none;
+                    outline: none;
+                }
+            }
+            .contactNumberContainer {
+                width: 100%;
+                height: 93px;
+                display: flex;
+                justify-content: center;
+                flex-flow: column;
+                padding: 14px 30px 10px;
+                border-bottom: 1px solid #F0F0F0;
+                background: white;
+                .contactNumber {
+                    font-size: 14px;
+                    color: #049688;
+                }
+                .inputContactNumber {
+                    font-size: 17px;
+                    border: none;
+                    outline: none;
+                }
+            }
+            .infoContactText {
+                height: 40px;
+                font-size: 14px;
+                color: #828282;
+                margin: 14px 20px 28px 30px;
+            }
+            .addContactBtn {
+                width: 46px;
+                height: 46px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                align-self: center;
+                background: #09E85E;
+                border-radius: 50%;
+                box-shadow: 0 1px 3px rgba(black,.4);
+                cursor: pointer;
             }
         }
         .topBarLeft {
@@ -187,7 +284,7 @@ $titleFont: sfProTextMedium;
                     .leftMoreOpen {
                         position: absolute;
                         width: 12%;
-                        height: 33%;
+                        height: 18.8%;
                         top: 55px;
                         left: 16.5%;
                         padding: 9px 0;
