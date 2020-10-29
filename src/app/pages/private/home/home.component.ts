@@ -212,6 +212,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     const Email = this.firebaseAuth.auth.currentUser.email;
     let emailRegexp = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
     let userExist;
+    let addNumber;
+    let addEmail;
 
     await this.firebase.database.ref('users').once('value', users => {
       users.forEach(user => {
@@ -220,25 +222,25 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (childData.email == Email) {
           Key = childKey;
           console.log("entramos", childKey);
-        }
-        console.log("recorrido", childKey);
-        user.forEach(info => {
-          const infoChildKey = info.key;
-          console.log("info", infoChildKey);
-          info.forEach(contact => {
-            const contactChildKey = contact.key;
-            console.log("contact", contactChildKey);
-            contact.forEach(numberContact => {
-              const numberContactChildKey = numberContact.key;
-              const numberContactchildData = numberContact.val();
-              if (numberContactchildData == ContactNumber) {
-                console.log("Ya lo tienes añadido");
-                this.contactAdded = true;
-              } 
-              console.log("numberContact", numberContactChildKey, numberContactchildData);
-            })
+          console.log("recorrido", childKey);
+          user.forEach(info => {
+            const infoChildKey = info.key;
+            console.log("info", infoChildKey);
+            info.forEach(contact => {
+              const contactChildKey = contact.key;
+              console.log("contact", contactChildKey);
+              contact.forEach(numberContact => {
+                const numberContactChildKey = numberContact.key;
+                const numberContactchildData = numberContact.val();
+                if (numberContactchildData == ContactNumber) {
+                  console.log("Ya lo tienes añadido");
+                  this.contactAdded = true;
+                }
+                console.log("numberContact", numberContactChildKey, numberContactchildData);
+              });
+            });
           });
-        });
+        }
       });
     });
 
@@ -246,6 +248,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       // Es correo
       console.log("Es correo");
       userExist = this.registerList.find(user => user.email == ContactNumber);
+      addNumber = userExist.phoneNumber.e164Number;
       ContactNumber = userExist && userExist.email || undefined;
       if (!userExist) {
         console.log("Este usuario no existe");
@@ -266,7 +269,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           }, 3000);
           this.firebase.database.ref('users').child(Key).child('contacts').push({
             contactName: ContactName,
-            contactNumber: ContactNumber,
+            contactNumber: addNumber,
+            contactEmail: ContactNumber,
           });
         } else {
           console.log("Ya lo tienes añadido");
@@ -282,6 +286,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.log("Es teléfono");
       // Es teléfono
       userExist = this.registerList.find(user => user.phoneNumber.e164Number == ContactNumber && user);
+      addEmail = userExist.email;
       if (!userExist) {
         console.log("Este usuario no existe");
         const query: string = '#app #userDoesNotExist';
@@ -302,6 +307,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.firebase.database.ref('users').child(Key).child('contacts').push({
             contactName: ContactName,
             contactNumber: ContactNumber,
+            contactEmail: addEmail,
           });
         } else {
           console.log("Ya lo tienes añadido");
