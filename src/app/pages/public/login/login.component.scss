@@ -52,6 +52,21 @@ $titleFont: sfProTextMedium;
             font-weight: bold;
         }
     }
+    .userDoesNotExist {
+        width: calc(65% - 138px);
+        height: 30px;
+        padding: 8px;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 290px;
+        color: #DD3444;
+        background: rgba(#DD3444, 0.3);
+        border-radius: 5px;
+        border: 1px solid #DD3444;
+        z-index: 2;
+    }
     .box {
         width: 65%;
         position: absolute;

@@ -15,6 +15,7 @@ import { AuthService } from './shared/services/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     BrowserAnimationsModule,
-    NgxIntlTelInputModule
+    NgxIntlTelInputModule,
+    HttpClientModule
   ],
   providers: [
     RegisterService,

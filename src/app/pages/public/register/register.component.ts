@@ -140,10 +140,28 @@ export class RegisterComponent implements OnInit {
 
     if (EmailExist) {
       console.log("Ya existe este email");
+      const query: string = '.appContainer #emailTaken';
+      const emailTaken: any = document.querySelector(query);
+      emailTaken.style.display = "flex";
+      setTimeout(() => {
+        emailTaken.style.display = "none";
+      }, 3000);
     } else if (PhoneExist) {
       console.log("Ya existe este número");
+      const query: string = '.appContainer #phoneTaken';
+      const phoneTaken: any = document.querySelector(query);
+      phoneTaken.style.display = "flex";
+      setTimeout(() => {
+        phoneTaken.style.display = "none";
+      }, 3000);
     } else if (EmailExist && PhoneExist) {
       console.log("Ya existen email y número");
+      const query: string = '.appContainer #phoneEmailTaken';
+      const phoneEmailTaken: any = document.querySelector(query);
+      phoneEmailTaken.style.display = "flex";
+      setTimeout(() => {
+        phoneEmailTaken.style.display = "none";
+      }, 3000);
     } else {
       console.log("Registré");
       this.registerService.insertRegister(this.ngForm.value);
@@ -174,7 +192,6 @@ export class RegisterComponent implements OnInit {
 
       } else {
         console.log("Passwords do no match");
-
       }
     }
   }

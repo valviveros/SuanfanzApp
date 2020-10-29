@@ -115,10 +115,19 @@ $titleFont: sfProTextMedium;
                     font-size: 14px;
                     color: #049688;
                 }
-                .inputYourName {
-                    font-size: 17px;
-                    border: none;
-                    outline: none;
+                .inputNameContainer {
+                    display: flex;
+                    flex-flow: row;
+                    .inputYourName {
+                        width: 95%;
+                        font-size: 17px;
+                        border: none;
+                        outline: none;
+                    }
+                    .checkYourName{
+                        margin-top: 5px;
+                        cursor: pointer;
+                    }
                 }
             }
             .infoContactText {
@@ -139,6 +148,38 @@ $titleFont: sfProTextMedium;
             background: white;
             transition: all .3s ease;
             z-index: 100;
+            .contactAdded {
+                width: 90%;
+                height: 30px;
+                padding: 8px;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                align-self: center;
+                position: absolute;
+                top: 60px;
+                color: white;
+                background: rgba(#03D755, 1);
+                border-radius: 5px;
+                border: 1px solid #03D755;
+                z-index: 2;
+            }
+            .userDoesNotExist {
+                width: 90%;
+                height: 30px;
+                padding: 8px;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                align-self: center;
+                position: absolute;
+                top: 60px;
+                color: white;
+                background: rgba(#DD3444, 1);
+                border-radius: 5px;
+                border: 1px solid #DD3444;
+                z-index: 2;
+            }
             .topPanelContainer {
                 width: 100%;
                 height: 108px;

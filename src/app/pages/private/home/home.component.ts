@@ -10,6 +10,8 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserI } from 'src/app/shared/interfaces/UserI';
 import { RegisterService } from "src/app/shared/services/register.service";
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -74,7 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { }
+  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.initChat();
@@ -165,9 +167,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       searchIcon.style.position = "absolute";
     }
   }
+  selectedFile: File
+
+  onFileChanged(event) {
+    this.selectedFile = event.target.files[0];
+  }
 
   changePicture() {
     console.log("Click foto");
+    // this.http.post('my-backend.com/file-upload', this.selectedFile)
+    // .subscribe(...);
+  }
+
+  sendYourName() {
+    console.log("enviar nombre");
   }
 
   panelNewContact() {
@@ -217,9 +230,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       userExist = this.registerList.find(user => user.email == ContactNumber);
       ContactNumber = userExist && userExist.email || undefined;
       if (!userExist) {
-        console.log("Este usuario no existe")
+        console.log("Este usuario no existe");
+        const query: string = '#app #userDoesNotExist';
+        const userDoesNotExist: any = document.querySelector(query);
+        userDoesNotExist.style.display = "flex";
+        setTimeout(() => {
+          userDoesNotExist.style.display = "none";
+        }, 3000);
       } else {
         console.log(ContactName, ContactNumber);
+        const query: string = '#app #contactAdded';
+        const contactAdded: any = document.querySelector(query);
+        contactAdded.style.display = "flex";
+        setTimeout(() => {
+          contactAdded.style.display = "none";
+        }, 3000);
         this.firebase.database.ref('users').child(Key).child('contacts').push({
           contactName: ContactName,
           contactNumber: ContactNumber,
@@ -230,9 +255,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       // Es teléfono
       userExist = this.registerList.find(user => user.phoneNumber.e164Number == ContactNumber && user);
       if (!userExist) {
-        console.log("Este usuario no existe")
+        console.log("Este usuario no existe");
+        const query: string = '#app #userDoesNotExist';
+        const userDoesNotExist: any = document.querySelector(query);
+        userDoesNotExist.style.display = "flex";
+        setTimeout(() => {
+          userDoesNotExist.style.display = "none";
+        }, 3000);
       } else {
         console.log(ContactName, ContactNumber);
+        const query: string = '#app #contactAdded';
+        const contactAdded: any = document.querySelector(query);
+        contactAdded.style.display = "flex";
+        setTimeout(() => {
+          contactAdded.style.display = "none";
+        }, 3000);
         this.firebase.database.ref('users').child(Key).child('contacts').push({
           contactName: ContactName,
           contactNumber: ContactNumber,

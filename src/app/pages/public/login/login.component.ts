@@ -69,7 +69,12 @@ export class LoginComponent implements OnInit {
         console.log(`Error [${errorCode}]: ${errorMessage}`);
       });
     } else {
-      alert("El usuario no existe");
+      const query: string = '.appContainer #userDoesNotExist';
+      const userDoesNotExist: any = document.querySelector(query);
+      userDoesNotExist.style.display = "flex";
+      setTimeout(() => {
+        userDoesNotExist.style.display = "none";
+      }, 3000);
     }
   }
 }
