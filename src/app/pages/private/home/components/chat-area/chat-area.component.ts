@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from '../../interfaces/ChatI';
 import { MessageI } from '../../interfaces/MessageI';
-import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
+import * as io from 'socket.io-client'
+
 
 
 @Component({
@@ -11,8 +13,8 @@ import * as io from 'socket.io-client';
   styleUrls: ['./chat-area.component.scss']
 })
 export class ChatAreaComponent implements OnInit {
-  sockect;
   userConnected: string 
+  socket = io.connect('http://localhost:3000');
   @Input() title: string = ""
   @Input() icon: string = ""
   @Input() status: string = ""
@@ -20,16 +22,14 @@ export class ChatAreaComponent implements OnInit {
 
   msg: string;
   constructor(public chatService: ChatService) { 
-    this.sockect = io();
 
   }
 
   ngOnInit(): void {
-    this.sockect.on('broadcast',(sockect) => {
-      console.log("sdfsdfsdf")
-      document.body.innerHTML = sockect;
-      
-    });
+    this.socket.on('broadcast',(socket) =>{
+      const status = document.getElementById('statusConection');
+      status.innerHTML = socket
+    })
   }
   sendMsg() {
     const msg: MessageI = {
