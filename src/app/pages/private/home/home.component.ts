@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   countMore: number = 0;
   countContact: number = 0;
   countProfile: number = 0;
+  contactAdded: Boolean = false;
 
   contactForm = new FormGroup({
     contactName: new FormControl(),
@@ -221,6 +222,23 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log("entramos", childKey);
         }
         console.log("recorrido", childKey);
+        user.forEach(info => {
+          const infoChildKey = info.key;
+          console.log("info", infoChildKey);
+          info.forEach(contact => {
+            const contactChildKey = contact.key;
+            console.log("contact", contactChildKey);
+            contact.forEach(numberContact => {
+              const numberContactChildKey = numberContact.key;
+              const numberContactchildData = numberContact.val();
+              if (numberContactchildData == ContactNumber) {
+                console.log("Ya lo tienes añadido");
+                this.contactAdded = true;
+              } 
+              console.log("numberContact", numberContactChildKey, numberContactchildData);
+            })
+          });
+        });
       });
     });
 
@@ -238,17 +256,27 @@ export class HomeComponent implements OnInit, OnDestroy {
           userDoesNotExist.style.display = "none";
         }, 3000);
       } else {
-        console.log(ContactName, ContactNumber);
-        const query: string = '#app #contactAdded';
-        const contactAdded: any = document.querySelector(query);
-        contactAdded.style.display = "flex";
-        setTimeout(() => {
-          contactAdded.style.display = "none";
-        }, 3000);
-        this.firebase.database.ref('users').child(Key).child('contacts').push({
-          contactName: ContactName,
-          contactNumber: ContactNumber,
-        });
+        if (!this.contactAdded) {
+          console.log(ContactName, ContactNumber);
+          const query: string = '#app #contactAdded';
+          const contactAdded: any = document.querySelector(query);
+          contactAdded.style.display = "flex";
+          setTimeout(() => {
+            contactAdded.style.display = "none";
+          }, 3000);
+          this.firebase.database.ref('users').child(Key).child('contacts').push({
+            contactName: ContactName,
+            contactNumber: ContactNumber,
+          });
+        } else {
+          console.log("Ya lo tienes añadido");
+          const query: string = '#app #userAlreadyAdded';
+          const userAlreadyAdded: any = document.querySelector(query);
+          userAlreadyAdded.style.display = "flex";
+          setTimeout(() => {
+            userAlreadyAdded.style.display = "none";
+          }, 3000);
+        }
       }
     } else {
       console.log("Es teléfono");
@@ -263,17 +291,27 @@ export class HomeComponent implements OnInit, OnDestroy {
           userDoesNotExist.style.display = "none";
         }, 3000);
       } else {
-        console.log(ContactName, ContactNumber);
-        const query: string = '#app #contactAdded';
-        const contactAdded: any = document.querySelector(query);
-        contactAdded.style.display = "flex";
-        setTimeout(() => {
-          contactAdded.style.display = "none";
-        }, 3000);
-        this.firebase.database.ref('users').child(Key).child('contacts').push({
-          contactName: ContactName,
-          contactNumber: ContactNumber,
-        });
+        if (!this.contactAdded) {
+          console.log(ContactName, ContactNumber);
+          const query: string = '#app #contactAdded';
+          const contactAdded: any = document.querySelector(query);
+          contactAdded.style.display = "flex";
+          setTimeout(() => {
+            contactAdded.style.display = "none";
+          }, 3000);
+          this.firebase.database.ref('users').child(Key).child('contacts').push({
+            contactName: ContactName,
+            contactNumber: ContactNumber,
+          });
+        } else {
+          console.log("Ya lo tienes añadido");
+          const query: string = '#app #userAlreadyAdded';
+          const userAlreadyAdded: any = document.querySelector(query);
+          userAlreadyAdded.style.display = "flex";
+          setTimeout(() => {
+            userAlreadyAdded.style.display = "none";
+          }, 3000);
+        }
       }
     }
 
