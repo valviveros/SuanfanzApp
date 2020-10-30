@@ -26,6 +26,8 @@ $titleFont: sfProTextMedium;
     align-items: center;
     background: #E5DDD5;
     font-family: $bodyFont;
+
+    
     .leftBigContainer {
         flex-grow: 1;
         flex-shrink: 1;
@@ -411,12 +413,14 @@ $titleFont: sfProTextMedium;
             width: 100%;
             height: calc(100% - 108px);
             background: white;
+
             .inboxChat1 {
                 width: 100%;
                 height: 72px;
                 background: white;
                 display: flex;
                 cursor: pointer;
+                z-index: 2;
                 &:hover {
                     background: #F5F5F5;
                 }

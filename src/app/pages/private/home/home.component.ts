@@ -11,7 +11,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { UserI } from 'src/app/shared/interfaces/UserI';
 import { RegisterService } from "src/app/shared/services/register.service";
 import { HttpClient } from '@angular/common/http';
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,7 +22,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   countContact: number = 0;
   countProfile: number = 0;
   contactAdded: Boolean = false;
+  fileUrl: string;
+  imgUrl: string;
 
+  yourNameForm = new FormGroup({
+    yourName: new FormControl()
+  });
   contactForm = new FormGroup({
     contactName: new FormControl(),
     contactNumber: new FormControl(),
@@ -38,36 +42,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     };
 
   chats: Array<ChatI> = [
-    {
-      title: "Santi",
-      icon: "/assets/img/ppRightBar.png",
-      status: "online",
-      isRead: false,
-      msgPreview: "Entonces ando usando fotos reales hahaha",
-      lastMsg: "11:13",
-      msgs: [
-        { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
-        { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
-      ]
-    },
-    {
-      title: "Pablo Bejarano",
-      icon: "/assets/img/ppInbox.png",
-      status: "online",
-      isRead: true,
-      msgPreview: "Estrenando componente",
-      lastMsg: "18:30",
-      msgs: []
-    },
-    {
-      title: "Pablo Bejarano 2",
-      icon: "/assets/img/ppInbox.png",
-      status: "online",
-      isRead: true,
-      msgPreview: "Nice front 😎",
-      lastMsg: "23:30",
-      msgs: []
-    },
+    // {
+    //   title: "Santi",
+    //   icon: "/assets/img/ppRightBar.png",
+    //   status: "online",
+    //   isRead: false,
+    //   msgPreview: "Entonces ando usando fotos reales hahaha",
+    //   lastMsg: "11:13",
+    //   msgs: [
+    //     { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+    //     { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
+    //   ]
+    // },
+    // {
+    //   title: "Pablo Bejarano",
+    //   icon: "/assets/img/ppInbox.png",
+    //   status: "online",
+    //   isRead: true,
+    //   msgPreview: "Estrenando componente",
+    //   lastMsg: "18:30",
+    //   msgs: []
+    // },
+    // {
+    //   title: "Pablo Bejarano 2",
+    //   icon: "/assets/img/ppInbox.png",
+    //   status: "online",
+    //   isRead: true,
+    //   msgPreview: "Nice front 😎",
+    //   lastMsg: "23:30",
+    //   msgs: []
+    // },
   ];
 
   currentChat = {
@@ -168,20 +172,43 @@ export class HomeComponent implements OnInit, OnDestroy {
       searchIcon.style.position = "absolute";
     }
   }
-  selectedFile: File
 
-  onFileChanged(event) {
-    this.selectedFile = event.target.files[0];
+  getUrl(event) {
+    this.fileUrl = event;
+    console.log("URL recibida en padre: " + this.fileUrl);
+  }
+  getImg(event) {
+    this.imgUrl = event;
+    console.log("URL recibida en padre: " + this.imgUrl);
+    this.sendImage();
   }
 
-  changePicture() {
-    console.log("Click foto");
-    // this.http.post('my-backend.com/file-upload', this.selectedFile)
-    // .subscribe(...);
+  async sendImage() {
+    console.log("ENTRE MANASO");
+
+    if (this.imgUrl) {
+      let Key;
+      const Email = this.firebaseAuth.auth.currentUser.email;
+      await this.firebase.database.ref("users").once("value", (users) => {
+        users.forEach((user) => {
+          const childKey = user.key;
+          const childData = user.val();
+          if (childData.email == Email) {
+            Key = childKey;
+            console.log("entramos", childKey);
+            console.log("recorrido", childKey);
+          }
+
+        });
+      });
+      this.firebase.database.ref("users").child(Key).child("images").push({
+        imgUrl: this.imgUrl
+      });
+    }
   }
 
   sendYourName() {
-    console.log("enviar nombre");
+    
   }
 
   panelNewContact() {
@@ -272,6 +299,19 @@ export class HomeComponent implements OnInit, OnDestroy {
             contactNumber: addNumber,
             contactEmail: ContactNumber,
           });
+          // creamos su inbox-chat
+          this.chats.push({
+            title: ContactName,
+            icon: "/assets/img/ppRightBar.png",
+            status: "online",
+            isRead: false,
+            msgPreview: "Entonces ando usando fotos reales hahaha",
+            lastMsg: "11:13",
+            msgs: [
+              { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+              { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
+            ]
+          })
         } else {
           console.log("Ya lo tienes añadido");
           const query: string = '#app #userAlreadyAdded';

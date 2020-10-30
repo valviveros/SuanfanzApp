@@ -7,15 +7,16 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
-
+import { DropZoneDirective } from '../../../shared/services/drop-zone.directive';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     InboxChatComponent,
     ChatAreaComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    FileUploadComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, BrowserModule, HttpClientModule

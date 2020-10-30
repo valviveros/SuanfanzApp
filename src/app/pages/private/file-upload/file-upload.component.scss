@@ -1,0 +1,29 @@
+.dropzone {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    font-weight: 12;
+    border-radius: 50%;
+    background: #6c757db5;
+    opacity: 0;
+    top: 100px;
+    left: 116px;
+    cursor: pointer;
+    z-index: 2;
+    &:hover {
+        opacity: 1;
+    }
+}
+  
+.dropzone.hovering {
+    border: 2px solid #00f839;
+    color: #dadada !important;
+}
+.dropzone .file-label {
+    font-size: 0.8em;
+}
+progress::-webkit-progress-value {
+    transition: width 0.1s ease;
+}

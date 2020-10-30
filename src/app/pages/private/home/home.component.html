@@ -10,8 +10,8 @@
                 <div class="editProfileText">Profile</div>
             </div>
             <div class="profileImgHolder">
-                <input style="display: none" type="file" (change)="onFileChanged($event)">
-                <div class="picOverlay" (click)="changePicture()">
+                <app-file-upload (imgUrlEmitter)="getImg($event)"></app-file-upload>
+                <div class="picOverlay">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                         <path fill="#ffffff"
                             d="M21.317 4.381H10.971L9.078 2.45c-.246-.251-.736-.457-1.089-.457H4.905c-.352 0-.837.211-1.078.468L1.201 5.272C.96 5.529.763 6.028.763 6.38v1.878l-.002.01v11.189a1.92 1.92 0 0 0 1.921 1.921h18.634a1.92 1.92 0 0 0 1.921-1.921V6.302a1.92 1.92 0 0 0-1.92-1.921zM12.076 18.51a5.577 5.577 0 1 1 0-11.154 5.577 5.577 0 0 1 0 11.154zm0-9.506a3.929 3.929 0 1 0 0 7.858 3.929 3.929 0 0 0 0-7.858z">
@@ -21,13 +21,18 @@
                 </div>
                 <img class="profile" src="/assets/img/pp.png" alt="" srcset="">
             </div>
+            <form [formGroup]="yourNameForm">
                 <div class="yourNameContainer">
                     <div class="yourName">Your Name</div>
                     <div class="inputNameContainer">
                         <input class="inputYourName" formControlName="yourName" type="text" placeholder="Type name">
-                        <svg class="checkYourName" (click)="sendYourName()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="#919191" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"></path></svg>
+                        <svg class="checkYourName" (click)="sendYourName()" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="#919191" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"></path>
+                        </svg>
                     </div>
                 </div>
+            </form>
             <div class="infoContactText">This is not your username or pin. This name will be visible to your SuanfanzApp
                 contacts.</div>
         </div>
@@ -116,6 +121,7 @@
                 [profilePic]="inbox.icon" [name]="inbox.title" [msgTime]="inbox.lastMsg" [msgPreview]="inbox.msgPreview"
                 [isRead]="inbox.isRead"></app-inbox-chat>
         </div>
+
     </div>
     <div class="rightBigContainer">
         <app-chat-area [title]="currentChat.title" [icon]="currentChat.icon" [status]="currentChat.status"

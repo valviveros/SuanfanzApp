@@ -16,12 +16,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { HttpClientModule } from '@angular/common/http';
+import { DropZoneDirective } from './shared/services/drop-zone.directive';
+import { AngularFirestoreModule, AngularFirestore }    from 'angularfire2/firestore';
+import { AngularFireStorageModule, AngularFireStorage }    from 'angularfire2/storage';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
+    DropZoneDirective,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,9 @@ import { HttpClientModule } from '@angular/common/http';
     AngularFireAuthModule,
     BrowserAnimationsModule,
     NgxIntlTelInputModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [
     RegisterService,
