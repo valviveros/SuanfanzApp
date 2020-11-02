@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   contactAdded: Boolean = false;
   fileUrl: string;
   imgUrl: string;
+  imageSelected: string;
 
   yourNameForm = new FormGroup({
     yourName: new FormControl()
@@ -86,14 +87,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.registerService.getRegister()
-    .snapshotChanges().subscribe(item => {
-      this.registerList = [];
-      item.forEach(element => {
-        let x = element.payload.toJSON();
-        x["$key"] = element.key;
-        this.registerList.push(x as UserI);
+      .snapshotChanges().subscribe(item => {
+        this.registerList = [];
+        item.forEach(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          this.registerList.push(x as UserI);
+        });
       });
-    });
     this.loadChats();
   }
 
@@ -212,10 +213,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.fileUrl = event;
     console.log("URL recibida en padre: " + this.fileUrl);
   }
-  getImg(event) {
+  async getImg(event) {
     this.imgUrl = event;
     console.log("URL recibida en padre: " + this.imgUrl);
-    this.sendImage();
+    await this.sendImage();
   }
 
   async sendImage() {
@@ -238,6 +239,42 @@ export class HomeComponent implements OnInit, OnDestroy {
         imgUrl: this.imgUrl
       });
     }
+  }
+
+  async searchImg() {
+    let Key;
+    let ContactNumber = this.contactForm.controls.contactNumber.value;
+
+    await this.firebase.database.ref("users").once("value", (users) => {
+      users.forEach((user) => {
+        const childKey = user.key;
+        const childData = user.val();  
+        if (childData.email == ContactNumber) {
+          Key = childKey;
+          console.log("entramos", childKey);
+          console.log("recorrido", childKey);
+          user.forEach((info) => {
+            const infoChildKey = info.key;
+            const infoChildData = info.val();
+            console.log("info", infoChildData);
+            info.forEach((images) => {
+              const imagesChildKey = images.key;
+              const imagesChilData = images.val();
+              console.log("images", imagesChildKey);
+              images.forEach((imgUrl) => {
+                const imagesChildKey = imgUrl.key;
+                const imagesChildData = imgUrl.val();
+                if (imagesChildKey == "imgUrl") {
+                  this.imageSelected = imagesChildData;
+                  console.log("IMAGEEEEEN", this.imageSelected);
+                }
+              });
+            });
+          });
+        }
+      });
+    });
+    return this.imageSelected;
   }
 
   async sendYourName() {
@@ -338,6 +375,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, 3000);
       } else {
         if (!this.contactAdded) {
+          this.searchImg();
           console.log(ContactName, ContactNumber);
           const query: string = '#app #contactAdded';
           const contactAdded: any = document.querySelector(query);
@@ -353,7 +391,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           // creamos su inbox-chat
           this.chats.push({
             title: ContactName,
-            icon: "/assets/img/ppRightBar.png",
+            icon: this.imageSelected,
             status: "online",
             isRead: false,
             msgPreview: "Entonces ando usando fotos reales hahaha",
@@ -392,6 +430,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, 3000);
       } else {
         if (!this.contactAdded) {
+          this.searchImg();
           console.log(ContactName, ContactNumber);
           const query: string = '#app #contactAdded';
           const contactAdded: any = document.querySelector(query);
@@ -403,6 +442,23 @@ export class HomeComponent implements OnInit, OnDestroy {
             contactName: ContactName,
             contactNumber: ContactNumber,
             contactEmail: addEmail,
+          });
+          // creamos su inbox-chat
+          this.chats.push({
+            title: ContactName,
+            icon: this.imageSelected,
+            status: "online",
+            isRead: false,
+            msgPreview: "Entonces ando usando fotos reales hahaha",
+            lastMsg: "11:13",
+            msgs: [
+              { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
+              { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
+            ]
+          });
+          let chatsSize = this.chats.length - 1;
+          this.firebase.database.ref('users').child(Key).child('chatRooms').push({
+            chats: this.chats[chatsSize],
           });
         } else {
           console.log("Ya lo tienes añadido");
