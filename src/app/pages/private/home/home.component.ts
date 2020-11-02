@@ -95,6 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.registerList.push(x as UserI);
         });
       });
+    this.updateProfilePhoto();
     this.loadChats();
   }
 
@@ -217,6 +218,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.imgUrl = event;
     console.log("URL recibida en padre: " + this.imgUrl);
     await this.sendImage();
+    await this.updateProfilePhoto();
   }
 
   async sendImage() {
@@ -244,12 +246,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   async searchImg() {
     let Key;
     let ContactNumber = this.contactForm.controls.contactNumber.value;
+    this.imageSelected = '/assets/img/user.svg';
 
     await this.firebase.database.ref("users").once("value", (users) => {
       users.forEach((user) => {
         const childKey = user.key;
-        const childData = user.val();  
-        if (childData.email == ContactNumber) {
+        const childData = user.val();
+        if (childData.email == ContactNumber || childData.phoneNumber.e164Number == ContactNumber) {
           Key = childKey;
           console.log("entramos", childKey);
           console.log("recorrido", childKey);
@@ -275,6 +278,43 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
     });
     return this.imageSelected;
+  }
+
+  async updateProfilePhoto() {
+    let Key;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+
+    await this.firebase.database.ref("users").once("value", (users) => {
+      users.forEach((user) => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          user.forEach((info) => {
+            info.forEach((images) => {
+              images.forEach((imgUrl) => {
+                const imagesChildKey = imgUrl.key;
+                const imagesChildData = imgUrl.val();
+                if (imagesChildKey == "imgUrl") {
+                  this.imageSelected = imagesChildData;
+                }
+              });
+            });
+          });
+        }
+      });
+    });
+
+    if (this.imageSelected) {
+      const query: string = "#app .profileBig";
+      const profileBig: any = document.querySelector(query);
+      const query2: string = "#app .profile";
+      const profile: any = document.querySelector(query2);
+      profileBig.src = this.imageSelected;
+      profile.src = this.imageSelected;
+    } else {
+      this.imageSelected = "/assets/img/user.svg";
+    }
   }
 
   async sendYourName() {
