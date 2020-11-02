@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   yourNameForm = new FormGroup({
     yourName: new FormControl()
   });
+
   contactForm = new FormGroup({
     contactName: new FormControl(),
     contactNumber: new FormControl(),
@@ -84,16 +85,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.initChat();
     this.registerService.getRegister()
-      .snapshotChanges().subscribe(item => {
-        this.registerList = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x["$key"] = element.key;
-          this.registerList.push(x as UserI);
-        });
+    .snapshotChanges().subscribe(item => {
+      this.registerList = [];
+      item.forEach(element => {
+        let x = element.payload.toJSON();
+        x["$key"] = element.key;
+        this.registerList.push(x as UserI);
       });
+    });
+    this.loadChats();
   }
 
   ngOnDestroy(): void {
@@ -135,6 +136,40 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.subscriptionList[key].unsubscribe();
       }
     }
+  }
+
+  async loadChats() {
+    let Key;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+
+    await this.firebase.database.ref('users').once('value', users => {
+      users.forEach(user => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          console.log("entramosCargaChat", childKey);
+          console.log("recorridoCargaChat", childKey);
+          user.forEach(info => {
+            const infoChildKey = info.key;
+            console.log("infoCargaChat", infoChildKey);
+            if (infoChildKey == 'chatRooms') {
+              info.forEach(chatRooms => {
+                const contactChildKey = chatRooms.key;
+                console.log("contactCargaChat", contactChildKey);
+                chatRooms.forEach(chats => {
+                  const chatContactChildKey = chats.key;
+                  const chatContactChildData = chats.val();
+                  console.log("chats", chatContactChildData);
+                  this.chats.push(chatContactChildData);
+                });
+              });
+            }
+          });
+        }
+      });
+    });
+    this.initChat();
   }
 
   onMore() {
@@ -184,8 +219,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async sendImage() {
-    console.log("ENTRE MANASO");
-
     if (this.imgUrl) {
       let Key;
       const Email = this.firebaseAuth.auth.currentUser.email;
@@ -207,8 +240,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendYourName() {
-    
+  async sendYourName() {
+    console.log("Se envió el nombre");
+    const YourName = this.yourNameForm.controls.yourName.value;
+    let Key;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+    await this.firebase.database.ref("users").once("value", (users) => {
+      users.forEach((user) => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          console.log("entramos", childKey);
+          console.log("recorrido", childKey);
+        }
+
+      });
+    });
+    this.firebase.database.ref("users").child(Key).child("nickname").push({
+      nickName: YourName
+    });
   }
 
   panelNewContact() {
@@ -258,12 +309,12 @@ export class HomeComponent implements OnInit, OnDestroy {
               console.log("contact", contactChildKey);
               contact.forEach(numberContact => {
                 const numberContactChildKey = numberContact.key;
-                const numberContactchildData = numberContact.val();
-                if (numberContactchildData == ContactNumber) {
+                const numberContactChildData = numberContact.val();
+                if (numberContactChildData == ContactNumber) {
                   console.log("Ya lo tienes añadido");
                   this.contactAdded = true;
                 }
-                console.log("numberContact", numberContactChildKey, numberContactchildData);
+                console.log("numberContact", numberContactChildKey, numberContactChildData);
               });
             });
           });
@@ -311,7 +362,11 @@ export class HomeComponent implements OnInit, OnDestroy {
               { content: "Lorem ipsum dolor amet", isRead: true, isMe: true, time: "7:24" },
               { content: "Qué?", isRead: true, isMe: false, time: "7:25" },
             ]
-          })
+          });
+          let chatsSize = this.chats.length - 1;
+          this.firebase.database.ref('users').child(Key).child('chatRooms').push({
+            chats: this.chats[chatsSize],
+          });
         } else {
           console.log("Ya lo tienes añadido");
           const query: string = '#app #userAlreadyAdded';
