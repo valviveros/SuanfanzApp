@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   fileUrl: string;
   imgUrl: string;
   imageSelected: string;
+  nameSelected: string;
 
   yourNameForm = new FormGroup({
     yourName: new FormControl()
@@ -96,6 +97,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       });
     this.updateProfilePhoto();
+    this.updateYourName()
     this.loadChats();
   }
 
@@ -331,12 +333,51 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log("entramos", childKey);
           console.log("recorrido", childKey);
         }
-
       });
     });
     this.firebase.database.ref("users").child(Key).child("nickname").push({
-      nickName: YourName
+      yourName: YourName
     });
+  }
+
+  async updateYourName() {
+    let Key;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+    await this.firebase.database.ref("users").once("value", (users) => {
+      users.forEach((user) => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          console.log("entramos", childKey);
+          console.log("recorrido", childKey);
+          user.forEach((nickname) => {
+            const nicknameChildKey = nickname.key;
+            const nicknameChildData = nickname.val();
+            if (nicknameChildKey == "nickname") {
+              nickname.forEach((nicknameKey) => {
+                const nicknameKeyChildKey = nicknameKey.key;
+                const nicknameKeyChildData = nicknameKey.val();
+                nicknameKey.forEach((yourName) => {
+                  const yourNameChildKey = yourName.key;
+                  const yourNameChildData = yourName.val();
+                  this.nameSelected = yourNameChildData;
+                })
+              })
+            }
+          });
+        }
+      });
+    });
+
+    const query: string = "#app .inputYourName";
+    const inputYourName: any = document.querySelector(query);
+    if (this.nameSelected) {
+      inputYourName.value = this.nameSelected;
+    } else {
+      this.nameSelected = "";
+      inputYourName.value = this.nameSelected;
+    }
   }
 
   panelNewContact() {
