@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { RegisterService } from "src/app/shared/services/register.service";
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserI } from 'src/app/shared/interfaces/UserI';
+import { ChatService } from 'src/app/shared/services/chat/chat.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
     signupPassword: new FormControl(),
   });
 
-  constructor(private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { }
+  constructor(private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService, private chatService: ChatService) { }
 
   registerList: UserI[];
   register = [];
@@ -60,6 +61,7 @@ export class LoginComponent implements OnInit {
 
     if(userExist){
       this.firebaseAuth.auth.signInWithEmailAndPassword(email, password).then(() => {
+        this.chatService.IdUsuario(email);
         this.router.navigate(['/home']);
       }).catch(function (error) {
         // Handle Errors here.

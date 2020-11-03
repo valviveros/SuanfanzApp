@@ -26,6 +26,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   imgUrl: string;
   imageSelected: string;
   nameSelected: string;
+  activeChat: any;
+  addInfo: string;
+  countPop: number = 0;
 
   yourNameForm = new FormGroup({
     yourName: new FormControl()
@@ -119,14 +122,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         msg.isMe = this.currentChat.title === msg.owner ? true : false;
         this.currentChat.msgs.push(msg);
       });
+      this.whoIsWritingMe();
     });
-  }
-
-  onSelectInbox(index: number) {
-    this.currentChat.title = this.chats[index].title;
-    this.currentChat.icon = this.chats[index].icon;
-    this.currentChat.status = this.chats[index].status;
-    this.currentChat.msgs = this.chats[index].msgs;
   }
 
   async doLogout() {
@@ -380,7 +377,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  panelNewContact() {
+  openaddContact(){
+    if (this.countContact == 0){
+      this.panelNewContact(this.countContact);
+    } else {      
+      this.panelNewContact(this.countContact);
+    }
+  }
+  
+  panelNewContact(countContact: number) {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
     const query2: string = '#app .searchIcon';
@@ -471,9 +476,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
           // creamos su inbox-chat
           this.chats.push({
+            email: ContactNumber,
             title: ContactName,
             icon: this.imageSelected,
-            status: "online",
+            // status: "online",
             isRead: false,
             msgPreview: "Entonces ando usando fotos reales hahaha",
             lastMsg: "11:13",
@@ -526,9 +532,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
           // creamos su inbox-chat
           this.chats.push({
+            email: addEmail,
             title: ContactName,
             icon: this.imageSelected,
-            status: "online",
+            // status: "online",
             isRead: false,
             msgPreview: "Entonces ando usando fotos reales hahaha",
             lastMsg: "11:13",
@@ -557,5 +564,104 @@ export class HomeComponent implements OnInit, OnDestroy {
       contactName: "",
       contactNumber: "",
     });
+  }
+
+  whoIsWritingMe() {
+    console.log("Entre a la funcion renderizar");
+    this.subscriptionList.msgs = this.chatService.paraRenderizarMensaje().subscribe((msg: MessageI) => {
+      console.log("Llego mensaje");
+      console.log(msg.content);
+      if (this.chats.length == 0) {
+        console.log("primer IF")
+        this.cargandoContactos(msg);
+      } else {
+        for (let i = 0; i < this.chats.length; i++) {
+          console.log("entre al for y voy en el recorrido: " + i)
+          const newLocal = this.chats[i].email;
+          if (msg.from === newLocal) {
+            console.log("Segundo IF y meto nuevo mensage")
+            console.log("ya exite el contacto")
+            this.chats[i].lastMsg = msg.content
+            this.chats[i].msgPreview = msg.time
+            msg.isMe = this.currentChat.title === msg.owner ? true : false;
+            this.chats[i].msgs.push(msg);
+          } else {
+            this.countPop = 0;
+            // this.ConfirmPopUp(this.countPop);
+            console.log("Entre al else")
+            let f = i
+            f++
+            if (f == this.chats.length) {
+              console.log("Entro al Elsey creo nuevo contacto")
+              console.log("Nuevo contacto");
+              this.cargandoContactos(msg);
+              break
+            }
+          }
+        }
+      }
+    });
+  }
+
+  async cargandoContactos(msg: MessageI) {
+    msg.isMe = this.currentChat.title === msg.owner ? true : false;
+    this.chats.push({
+      email: msg.from,
+      title: msg.from,
+      icon: "/assets/img/user.svg",
+      status: "online",
+      msgPreview: msg.time,
+      isRead: false,
+      lastMsg: msg.content,
+      msgs: [msg]
+    })
+
+    this.addInfo = msg.from;
+  }
+  async myNewMessages(msg: MessageI) {
+    console.log("si imprimo mis mensajes")
+    msg.isMe = true;
+    this.currentChat.msgs.push(msg);
+  }
+
+  onSelectInbox(index: number) {
+
+    this.activeChat = this.chats[index].email;
+    console.log(this.activeChat);
+    this.currentChat.title = this.chats[index].title;
+    this.currentChat.icon = this.chats[index].icon;
+    this.currentChat.status = this.chats[index].status;
+    this.currentChat.msgs = this.chats[index].msgs;
+    this.chatService.idenificadorId(this.activeChat);
+
+  }
+
+  SearchAnim() { }
+
+  ConfirmPopUp(countPop: number) {
+    const query: string = "#app .ConfirmPopUp";
+    const ConfirmPopUp: any = document.querySelector(query);
+
+    if (countPop == 0) {
+      // this.countPop = 1;
+      ConfirmPopUp.style.opacity = 1;
+      ConfirmPopUp.style.transform = "scale(1)";
+    } else {
+      countPop = 0;
+      ConfirmPopUp.style.opacity = 0;
+      ConfirmPopUp.style.transform = "scale(0)";
+    }
+  }
+
+  async Add() {
+    let Email;
+    console.log("Entre en add");
+    this.countPop = 1;
+    this.countContact = 0;
+    // this.ConfirmPopUp(this.countPop);
+    this.panelNewContact(this.countContact);
+
+    Email = this.contactForm.controls.email;
+    Email = this.addInfo;
   }
 }

@@ -41,7 +41,7 @@
             <div id="userDoesNotExist" class="userDoesNotExist">User does not exist</div>
             <div id="userAlreadyAdded" class="userDoesNotExist">User already added</div>
             <div class="topPanelContainer">
-                <div class="goBackContainer" (click)="panelNewContact()">
+                <div class="goBackContainer" (click)="openaddContact()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                         <path fill="#ffffff" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path>
                     </svg>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="leftMoreOpen">
                         <ul class="leftMoreOpenContainer">
-                            <li class="newContact" (click)="panelNewContact()">New contact</li>
+                            <li class="newContact" (click)="openaddContact()">New contact</li>
                             <li class="newGroup">New group</li>
                             <li class="editProfile" (click)="panelEditProfile()">Profile</li>
                             <li class="logOut" (click)="doLogout()">Log out</li>
@@ -126,5 +126,13 @@
     <div class="rightBigContainer">
         <app-chat-area [title]="currentChat.title" [icon]="currentChat.icon" [status]="currentChat.status"
             [msgs]="currentChat.msgs"></app-chat-area>
+        <div class="confirmPopUp">
+            <div class="add" (click)="Add()">
+                Add Contact
+            </div>
+            <div class="block">
+                Block
+            </div>
+        </div>
     </div>
 </div>
