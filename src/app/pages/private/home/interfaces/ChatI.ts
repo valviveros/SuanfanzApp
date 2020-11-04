@@ -5,8 +5,8 @@ export interface ChatI{
     title: string
     icon: string
     status?: string
-    msgPreview: string
-    isRead: boolean
-    lastMsg: string
-    msgs: Array<MessageI>
+    msgPreview?: string
+    isRead?: boolean
+    lastMsg?: string
+    msgs?: Array<MessageI>
 }

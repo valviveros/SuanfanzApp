@@ -594,8 +594,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (msg.from === newLocal) {
             console.log("Segundo IF y meto nuevo mensage")
             console.log("ya exite el contacto")
-            this.chats[i].lastMsg = msg.content
-            this.chats[i].msgPreview = msg.time
+            this.chats[i].lastMsg = msg.time
+            this.chats[i].msgPreview = msg.content
             msg.isMe = this.currentChat.title === msg.owner ? true : false;
             this.chats[i].msgs.push(msg);
           } else {
@@ -804,9 +804,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       title: msg.from,
       icon: "/assets/img/user.svg",
       status: "online",
-      msgPreview: msg.time,
+      msgPreview: msg.content,
       isRead: false,
-      lastMsg: msg.content,
+      lastMsg: msg.time,
       msgs: [msg]
     })
 
