@@ -17,10 +17,13 @@
         </div>
     </div>
 </div>
-<div class="chat">
+
+<div class="chat" id="chat">
     <!--div class="chatDateContainer">
         <div class="chatDate">TODAY</div>
     </div-->
+    <div class="buttomDown" id="buttomDown"></div>
+
     <app-chat-message *ngFor="let msg of msgs" [content]="msg.content" [time]="msg.time" [isMe]="msg.isMe" [isRead] = "msg.isRead"></app-chat-message>
 </div>
 <div class="sendMessageForm">

@@ -73,8 +73,8 @@ $titleFont: sfProTextMedium;
         }
     }
 }
+
 .chat {
-    overflow: auto;
     overflow-y:scroll; 
     width: 100%;
     // height: calc(100% - 133px);
@@ -99,6 +99,17 @@ $titleFont: sfProTextMedium;
             padding: 5px 12px 6px;
             box-shadow:0 1px .5px rgba(black,.13);
         }
+    }
+    .buttomDown{
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        position: absolute;
+        margin-bottom:100px;
+        background-color: white;
+        bottom: -3%;
+        margin-left: 63vw;
+        box-shadow: 0px 0px 11px 3px rgba(0, 0, 0, 0.171);
     }
     
 }
