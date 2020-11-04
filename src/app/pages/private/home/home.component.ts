@@ -21,13 +21,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   countMore: number = 0;
   countContact: number = 0;
   countProfile: number = 0;
-<<<<<<< HEAD
+  countGroup: number = 0;
   contactAdded: Boolean = false;
+  contactGroup: Boolean = false;
   fileUrl: string;
   imgUrl: string;
-=======
- 
->>>>>>> b259ae7652b10d99e17febef1870e67815a7261c
+  imageSelected: string;
+  nameSelected: string;
+  activeChat: any;
+  addInfo: string;
+  countPop: number = 0;
+  GroupName: string;
+  areAllMembers: Boolean = false;
+  integrants: string[] = [];
+  addToGroup: Boolean = false;
+  //groups: Array<GroupI> = [];
 
   yourNameForm = new FormGroup({
     yourName: new FormControl()
@@ -85,12 +93,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-<<<<<<< HEAD
-  constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService, private http: HttpClient) { }
-=======
   constructor(public authService: AuthService, public chatService: ChatService, private router: Router, private firebase: AngularFireDatabase, private firebaseAuth: AngularFireAuth, private registerService: RegisterService) { 
   }
->>>>>>> b259ae7652b10d99e17febef1870e67815a7261c
 
   ngOnInit(): void {
     this.initChat();

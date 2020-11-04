@@ -15,15 +15,11 @@ import { AuthService } from './shared/services/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-<<<<<<< HEAD
-import { HttpClientModule } from '@angular/common/http';
-import { DropZoneDirective } from './shared/services/drop-zone.directive';
-import { AngularFirestoreModule, AngularFirestore }    from 'angularfire2/firestore';
-import { AngularFireStorageModule, AngularFireStorage }    from 'angularfire2/storage';
-=======
 import {AngularFirestoreModule, FirestoreSettingsToken} from "@angular/fire/firestore"
+import { DropZoneDirective } from './shared/services/drop-zone.directive';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import { HttpClientModule } from '@angular/common/http';
 
->>>>>>> b259ae7652b10d99e17febef1870e67815a7261c
 
 @NgModule({
   declarations: [
