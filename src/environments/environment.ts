@@ -14,6 +14,16 @@ export const environment = {
     appId: "1:629403544257:web:900f292c09f3f77c410240",
     measurementId: "G-JB1GEBLZJE"
   }
+  // firebaseConfigChat : {
+  //   apiKey: "AIzaSyA5bsLNcJ_17FBanTrIPn8A-lwCPplaL5o",
+  //   authDomain: "chats-angular-bb6bb.firebaseapp.com",
+  //   databaseURL: "https://chats-angular-bb6bb.firebaseio.com",
+  //   projectId: "chats-angular-bb6bb",
+  //   storageBucket: "chats-angular-bb6bb.appspot.com",
+  //   messagingSenderId: "860516531816",
+  //   appId: "1:860516531816:web:7751cce5e628d94c57c5dd",
+  //   measurementId: "G-L6J294NQRP"
+  // }
 };
 
 /*

@@ -44,6 +44,7 @@ $titleFont: sfProTextMedium;
             }
         }
         .rightRightIcons {
+           
             height: 40px;
             margin-left: 20px;
             display: flex;
@@ -72,7 +73,9 @@ $titleFont: sfProTextMedium;
         }
     }
 }
+
 .chat {
+    overflow-y:scroll; 
     width: 100%;
     // height: calc(100% - 133px);
     height: calc(100% - 121px);
@@ -97,9 +100,21 @@ $titleFont: sfProTextMedium;
             box-shadow:0 1px .5px rgba(black,.13);
         }
     }
+    .buttomDown{
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        position: absolute;
+        margin-bottom:100px;
+        background-color: white;
+        bottom: -3%;
+        margin-left: 63vw;
+        box-shadow: 0px 0px 11px 3px rgba(0, 0, 0, 0.171);
+    }
     
 }
 .sendMessageForm {
+    position: relative;
     width: 100%;
     height: 62px;
     padding: 5px 10px;
