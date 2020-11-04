@@ -53,6 +53,11 @@ export class ChatAreaComponent implements OnInit {
     }
     this.chatService.sendMsg(msg);
     this.msg = "";
+    let epa = document.getElementById('chat');
+    epa.scrollTo({
+      top: 400,
+      behavior: 'smooth',
+    })
   }
 
 
