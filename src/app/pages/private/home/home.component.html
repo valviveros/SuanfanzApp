@@ -66,6 +66,44 @@
                 </svg>
             </div>
         </div>
+        <div class="addNewGroup">
+            <div id="groupContactAdded" class="groupContactAdded">Contact added</div>
+            <div id="groupUserDoesNotExist" class="groupUserDoesNotExist">User does not exist</div>
+            <div id="groupUserAlreadyAdded" class="groupUserDoesNotExist">User already added</div>
+            <div class="topPanelContainer">
+                <div class="goBackContainer" (click)="panelNewGroup()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="#ffffff" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path>
+                    </svg>
+                </div>
+                <div class="addNewGroupText">New group</div>
+            </div>
+            <form [formGroup]="groupForm">
+                <div class="groupNameContainer">
+                    <div class="groupName">Group Name</div>
+                    <input class="inputGroupContactName" formControlName="groupName" type="text"
+                        placeholder="Type name">
+                </div>
+                <div class="groupContactNumberContainer">
+                    <div class="groupContactNumber">Contact Number or Email Address</div>
+                    <input class="inputGroupContactNumber" formControlName="groupContactNumber" type="text"
+                        placeholder="Type number or email address">
+                </div>
+            </form>
+            <div class="infoGroupContactText">You need to add the country code before the number of your contact.</div>
+            <div class="groupBtns">
+                <div class="addGroupBtn" (click)="sendGroup()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="#ffffff" d="M8 17.1l-5.2-5.2-1.7 1.7 6.9 7L22.9 5.7 21.2 4 8 17.1z"></path>
+                    </svg>
+                </div>
+                <div class="nextGroupBtn" (click)="all()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
+                        <path fill="#ffffff" d="M15 7l-1.4 1.4 5.6 5.6H7v2h12.2l-5.6 5.6L15 23l8-8-8-8z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
         <div class="topBarLeft">
             <div class="tbLeftContainer">
                 <div class="profileContainer">
@@ -98,7 +136,7 @@
                     <div class="leftMoreOpen">
                         <ul class="leftMoreOpenContainer">
                             <li class="newContact" (click)="openaddContact()">New contact</li>
-                            <li class="newGroup">New group</li>
+                            <li class="newGroup" (click)="panelNewGroup()">New group</li>
                             <li class="editProfile" (click)="panelEditProfile()">Profile</li>
                             <li class="logOut" (click)="doLogout()">Log out</li>
                         </ul>

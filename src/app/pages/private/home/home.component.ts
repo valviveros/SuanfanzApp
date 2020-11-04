@@ -11,6 +11,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { UserI } from 'src/app/shared/interfaces/UserI';
 import { RegisterService } from "src/app/shared/services/register.service";
 import { HttpClient } from '@angular/common/http';
+import { GroupI } from './interfaces/GroupI';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,7 +22,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   countMore: number = 0;
   countContact: number = 0;
   countProfile: number = 0;
+  countGroup: number = 0;
   contactAdded: Boolean = false;
+  contactGroup: Boolean = false;
   fileUrl: string;
   imgUrl: string;
   imageSelected: string;
@@ -29,6 +32,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   activeChat: any;
   addInfo: string;
   countPop: number = 0;
+  GroupName: string;
+  areAllMembers: Boolean = false;
+  integrants: string[] = [];
+  addToGroup: Boolean = false;
+  groups: Array<GroupI> = [];
 
   yourNameForm = new FormGroup({
     yourName: new FormControl()
@@ -37,6 +45,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   contactForm = new FormGroup({
     contactName: new FormControl(),
     contactNumber: new FormControl(),
+  });
+
+  groupForm = new FormGroup({
+    groupName: new FormControl(),
+    groupContactNumber: new FormControl(),
   });
 
   subscriptionList: {
@@ -377,14 +390,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  openaddContact(){
-    if (this.countContact == 0){
+  openaddContact() {
+    if (this.countContact == 0) {
       this.panelNewContact(this.countContact);
-    } else {      
+    } else {
       this.panelNewContact(this.countContact);
     }
   }
-  
+
   panelNewContact(countContact: number) {
     const query: string = '#app .addNewContact';
     const addNewContact: any = document.querySelector(query);
@@ -601,6 +614,187 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  panelNewGroup() {
+    const query: string = '#app .addNewGroup';
+    const addNewGroup: any = document.querySelector(query);
+    const query2: string = '#app .searchIcon';
+    const searchIcon: any = document.querySelector(query2);
+    const query3: string = '#app .leftMoreOpen';
+    const leftMoreOpen: any = document.querySelector(query3);
+    if (this.countGroup == 0) {
+      this.countGroup = 1;
+      addNewGroup.style.left = 0;
+      searchIcon.style.position = "relative";
+      leftMoreOpen.style.transform = "scale(0)";
+      leftMoreOpen.style.opacity = 0;
+      this.countMore = 0;
+    } else {
+      this.countGroup = 0;
+      addNewGroup.style.left = "-100vh";
+      searchIcon.style.position = "absolute";
+    }
+  }
+
+  async sendGroup() {
+    let Key;
+    this.GroupName = this.groupForm.controls.groupName.value;
+    let GroupContactNumber = this.groupForm.controls.groupContactNumber.value;
+    const Email = this.firebaseAuth.auth.currentUser.email;
+    let emailRegexp = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    let userExist;
+    let addNumber;
+    let addEmail;
+    let addName;
+
+    await this.firebase.database.ref("users").once("value", (users) => {
+      users.forEach((user) => {
+        const childKey = user.key;
+        const childData = user.val();
+        if (childData.email == Email) {
+          Key = childKey;
+          user.forEach((info) => {
+            const infoChildKey = info.key;
+            const infoChildData = info.val();
+            info.forEach((contact) => {
+              const contactChildKey = contact.key;
+              contact.forEach((numberContact) => {
+                const numberContactChildKey = numberContact.key;
+                const numberContactchildData = numberContact.val();
+                if (numberContactchildData == GroupContactNumber) {
+                  this.contactGroup = true;
+                }
+                console.log(
+                  "numberContact",
+                  numberContactChildKey,
+                  numberContactchildData
+                );
+              });
+            });
+          });
+        }
+      });
+    });
+
+    if (GroupContactNumber.match(emailRegexp)) {
+      // Es correo
+      console.log("Es correo");
+      userExist = this.registerList.find((user) => user.email == GroupContactNumber);
+      addNumber = userExist.phoneNumber.e164Number;
+      addName = userExist.name + " " + userExist.lname;
+      console.log("Es userexist");
+      console.log(userExist);
+      GroupContactNumber = (userExist && userExist.email) || undefined;
+
+      if (!userExist) {
+        console.log("Este usuario no existe");
+        const query: string = '#app #groupUserDoesNotExist';
+        const groupUserDoesNotExist: any = document.querySelector(query);
+        groupUserDoesNotExist.style.display = "flex";
+        setTimeout(() => {
+          groupUserDoesNotExist.style.display = "none";
+        }, 3000);
+      } else {
+        // if (!this.contactGroup) {
+          if (this.areAllMembers == true) {
+            this.areAllMembers = false;
+            console.log("Entre en if de AreAllMembers");
+            this.firebase.database.ref('users').child(Key).child(this.GroupName).push({
+              owner: Email,
+              integrants: this.integrants,
+              name: this.GroupName,
+              title: this.GroupName,
+              icon: "/assets/img/user.svg",
+              isRead: false,
+              msgPreview: "Melosqui melosqui",
+              lastMsg: "11:13",
+              msgs: [
+                { content: Email + " has invite you to the group " + this.GroupName, isRead: true, isMe: true, time: "7:24" },
+              ]
+            });
+            this.integrants.push(GroupContactNumber);
+            this.integrants = [];
+          } else {
+            console.log("Entre en else de AreAllMembers");
+            const query: string = '#app #groupContactAdded';
+            const groupContactAdded: any = document.querySelector(query);
+            groupContactAdded.style.display = "flex";
+            setTimeout(() => {
+              groupContactAdded.style.display = "none";
+            }, 3000);
+            this.integrants.push(GroupContactNumber);
+            console.log("integrants");
+            console.log(this.integrants);
+          }
+        // } else {
+        //   console.log("Ya lo tienes añadido");
+        //   const query: string = '#app #groupUserAlreadyAdded';
+        //   const groupUserAlreadyAdded: any = document.querySelector(query);
+        //   groupUserAlreadyAdded.style.display = "flex";
+        //   setTimeout(() => {
+        //     groupUserAlreadyAdded.style.display = "none";
+        //   }, 3000);
+        // }
+      } 
+    } else {
+      console.log("Es teléfono");
+      // Es teléfono
+      userExist = this.registerList.find((user) => user.phoneNumber.e164Number == GroupContactNumber && user);
+      addEmail = userExist.email;
+      addName = userExist.name + " " + userExist.lname;
+
+      if (!userExist) {
+        console.log("Este usuario no existe");
+        const query: string = '#app #groupUserDoesNotExist';
+        const groupUserDoesNotExist: any = document.querySelector(query);
+        groupUserDoesNotExist.style.display = "flex";
+        setTimeout(() => {
+          groupUserDoesNotExist.style.display = "none";
+        }, 3000);
+      } else {
+        if (!this.addToGroup) {
+          this.searchImg();
+          const query: string = '#app #groupContactAdded';
+          const groupContactAdded: any = document.querySelector(query);
+          groupContactAdded.style.display = "flex";
+          setTimeout(() => {
+            groupContactAdded.style.display = "none";
+          }, 3000);
+          this.groups.push({
+            owner: Email,
+            integrants: GroupContactNumber,
+            name: addName,
+            title: this.GroupName,
+            icon: "/assets/img/user.svg",
+            isRead: false,
+            msgPreview: "Melosqui melosqui",
+            lastMsg: "11:13",
+            msgs: [
+              { content: Email + " has invited you to the group " + this.GroupName, isRead: true, isMe: true, time: "7:24" },
+            ]
+          });
+        } else {
+          console.log("Este usuario no existe");
+          const query: string = '#app #groupUserDoesNotExist';
+          const groupUserDoesNotExist: any = document.querySelector(query);
+          groupUserDoesNotExist.style.display = "flex";
+          setTimeout(() => {
+            groupUserDoesNotExist.style.display = "none";
+          }, 3000);
+        }
+      }
+    }
+    // this.groupForm.reset({
+    //   groupName: this.GroupName,
+    //   groupContactNumber: ""
+    // });
+  }
+
+  all() {
+    this.areAllMembers = true;
+    this.sendGroup();
+    return this.areAllMembers;
   }
 
   async cargandoContactos(msg: MessageI) {
