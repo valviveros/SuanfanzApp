@@ -120,6 +120,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroySubscriptionList();
     this.chatService.disconnect();
+    
   }
 
   initChat() {

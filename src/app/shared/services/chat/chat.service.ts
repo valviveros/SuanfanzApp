@@ -5,6 +5,7 @@ import { MessageI } from 'src/app/pages/private/home/interfaces/MessageI';
 import { MessagePrivate } from 'src/app/pages/private/home/interfaces/MessagePrivate';
 import { NewUsers } from 'src/app/pages/private/home/interfaces/NewUsers';
 
+import {AngularFirestore} from "@angular/fire/firestore"
 @Injectable({
   providedIn: 'root'
 })
@@ -15,13 +16,21 @@ export class ChatService {
   email:any;
   contenido:any
   idenfiticacionMensaje:any;
-
   ListaUsuarios=[{}];
-  constructor() { }
- 
+  
+  constructor(private db : AngularFirestore) { }
+
+  getChatRooms(){
+    return this.db.collection('chatsRooms').snapshotChanges()//observar cambios en tiempo real
+  }
+
+  getchatRoom(chat_id : string){
+    return this.db.collection('chatsRoom').doc(chat_id).valueChanges()
+  }
+
   connect() {
     return new Observable(observer => {
-      this.socket = io('http://localhost:3000');
+      this.socket = io('localhost:3000');
       this.socket.on('connect', () => {
         this.identificadormio=this.socket.id;
         this.ListaUsuarios.push(this.email,this.identificadormio);

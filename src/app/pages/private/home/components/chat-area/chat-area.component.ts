@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener,ElementRef } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { MessageI } from '../../interfaces/MessageI';
 import { HomeComponent } from 'src/app/pages/private/home/home.component';
@@ -10,15 +10,17 @@ import * as io from 'socket.io-client';
   templateUrl: './chat-area.component.html',
   styleUrls: ['./chat-area.component.scss']
 })
-export class ChatAreaComponent implements OnInit {
 
+
+export class ChatAreaComponent implements OnInit {
   @Input() title: string = ""
   @Input() status: string = ""
   @Input() icon: string = ""
   @Input() msgs: Array<MessageI> = []
-
   msg: string;
   socket = io.connect('http://localhost:3000');
+  isShow: boolean;
+  topPosToStartShowing = 100;
 
   constructor(public chatService: ChatService, public homeComponent: HomeComponent) { }
 
@@ -30,6 +32,8 @@ export class ChatAreaComponent implements OnInit {
   }
   getTime(date){
     return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`
+    const ElButtom = document.getElementById('buttomDown');
+    ElButtom.addEventListener("click", this.ButtomDown);
   }
   sendMsg() {
     const msg: MessageI = {
@@ -45,5 +49,18 @@ export class ChatAreaComponent implements OnInit {
     this.homeComponent.myNewMessages(msg);
     this.chatService.sendMsg(msg);
     this.msg = "";
+    let epa = document.getElementById('chat');
+    epa.scrollTo({
+      top: 400,
+      behavior: 'smooth',
+    })
+  }
+
+  ButtomDown() {
+    let epa = document.getElementById('chat');
+    epa.scrollTo({
+      top: 400,
+      behavior: 'smooth',
+    });
   }
 }

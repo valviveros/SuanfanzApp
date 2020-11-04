@@ -19,6 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DropZoneDirective } from './shared/services/drop-zone.directive';
 import { AngularFirestoreModule, AngularFirestore }    from 'angularfire2/firestore';
 import { AngularFireStorageModule, AngularFireStorage }    from 'angularfire2/storage';
+import {FirestoreSettingsToken} from "@angular/fire/firestore"
+
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { AngularFireStorageModule, AngularFireStorage }    from 'angularfire2/st
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     BrowserAnimationsModule,
     NgxIntlTelInputModule,
     HttpClientModule,
@@ -44,7 +47,8 @@ import { AngularFireStorageModule, AngularFireStorage }    from 'angularfire2/st
   providers: [
     RegisterService,
     AuthService,
-    AngularFireAuthGuard
+    AngularFireAuthGuard,
+    {provide: FirestoreSettingsToken, useValue: {}}
   ],
   bootstrap: [AppComponent]
 })
